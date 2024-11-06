@@ -1,20 +1,20 @@
-### Administrative Management Project with CRA
+## Administrative Management Project with CRA
 
-##### This is a comprehensive practice project
+#### This is a comprehensive practice project
 
-##### Technic choices:
+#### Technic choices:
 - Framework React
 - TypeScript
 - Redux toolkit
 
-##### Functional components completed by this project：
+#### Functional components completed by this project：
 - HOC
 - Home page
 - Login page
 - Notfound page
 - Loading page etc.
 
-##### Functions implemented：
+#### Functions implemented：
 - Route Lazy Loading
 - Craco configuration
 - Route configuration
