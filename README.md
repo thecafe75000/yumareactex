@@ -6,3 +6,16 @@
 - Framework React
 - TypeScript
 - Redux toolkit
+
+##### Functional components completed by this project：
+- HOC
+- Home page
+- Login page
+- Notfound page
+- Loading page etc.
+
+##### Functions implemented：
+- Route Lazy Loading
+- Craco configuration
+- Route configuration
+- Route Guard
