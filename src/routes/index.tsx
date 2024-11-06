@@ -7,10 +7,10 @@ const Loading = lazy(() => import('@/components/Loading'))
 
 // comName:路由组件的名字
 const renderElement = (comName: string) => {
-  const FC = lazy(() => import('@/views/' + comName))
+  const FComp = lazy(() => import('@/views/' + comName))
   return (
     <Suspense fallback={<Loading />}>
-      <FC/>
+      <FComp/>
     </Suspense>
   )
 }
