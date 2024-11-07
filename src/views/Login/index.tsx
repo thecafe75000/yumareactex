@@ -1,10 +1,14 @@
 import React from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Flex, Input } from 'antd'
+import axios from 'axios'
 
 const Login = () => {
   const onFinish = (body:any) => {
-    console.log(body)
+    axios.post('/api/admin/login', body).then(res => {
+       console.log(res)
+     })
+    
   }
 
   return (

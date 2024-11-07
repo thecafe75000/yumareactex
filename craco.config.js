@@ -5,7 +5,17 @@ module.exports = {
   devServer: {
     open: true,
     host: 'hifromparis.com',
-    port: 8090
+    port: 8090,
+    // 使用代理解决跨域问题
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:9292',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api':''
+        }
+      }
+    }
   },
   webpack: {
     // 路径别名
