@@ -1,11 +1,14 @@
 import React from 'react'
+import { Spin } from 'antd';
+import './index.css'
 
 const Loading = () => {
   return (
-    <div>
-      <h3>The page is loading now...</h3>
+    <div className='spin'>
+      <Spin />
     </div>
   )
+ 
 }
 
 export default Loading

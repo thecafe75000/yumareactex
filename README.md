@@ -11,11 +11,11 @@
 - HOC
 - Home page
 - Login page
-- Notfound page
+- 404 Notfound page
 - Loading page etc.
 
 #### Functions implemented：
 - Route Lazy Loading
 - Craco configuration
 - Route configuration
-- Route Guard
+- Route guard

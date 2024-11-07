@@ -1,12 +1,10 @@
 import { lazy, Suspense } from 'react'
 import { useRoutes } from 'react-router-dom'
-
-
-// route lazy loading
-const Loading = lazy(() => import('@/components/Loading'))
+import Loading from '@/components/Loading'
 
 // comName:路由组件的名字
 const renderElement = (comName: string) => {
+  // 懒加载
   const FComp = lazy(() => import('@/views/' + comName))
   return (
     <Suspense fallback={<Loading />}>
