@@ -1,10 +1,10 @@
 import React from 'react'
 import { Spin } from 'antd';
-import './index.css'
+import styles from './index.module.less'
 
 const Loading = () => {
   return (
-    <div className='spin'>
+    <div className={styles.spin}>
       <Spin />
     </div>
   )
