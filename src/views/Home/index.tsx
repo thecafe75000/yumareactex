@@ -1,10 +1,15 @@
 import withAuth from '@/components/Hoc'
+import {Button} from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
+  const navigate = useNavigate()
+  const handleClick = () => {
+    localStorage.clear()
+    navigate('/login')
+  }
   return (
-    <div>
-      <h3>Home page</h3>
-    </div>
+    <Button type='primary' onClick={handleClick}> Log out</Button>
   )
 }
 
