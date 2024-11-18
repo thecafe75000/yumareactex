@@ -18,4 +18,6 @@
 - Route Lazy Loading
 - Craco configuration
 - Route configuration
+- CORS problem solved with proxy
 - Route guard
+- Axios secondary encapsulation

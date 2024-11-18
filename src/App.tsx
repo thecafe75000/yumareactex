@@ -6,8 +6,8 @@ const App = () => {
   const axiosInterceptors = useAxiosInterceptors()
   useEffect(() => {
     axiosInterceptors()
-  }, [axiosInterceptors])
-  return <Router/>
+  }, [])
+  return <Router />
 }
 
 export default App;

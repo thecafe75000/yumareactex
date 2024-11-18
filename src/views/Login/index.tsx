@@ -1,25 +1,24 @@
-import {  useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Flex, Input} from 'antd'
-import request from '@/axios/request'
-import type { TStoreState } from '@/store'
+import { Button, Form, Flex, Input } from 'antd'
+import { TDispatch, type TStoreState } from '@/store'
 import { useNavigate } from 'react-router-dom'
-import { useMessage } from '@/utils/useMessage'
+import { useMessage } from '@/utils'
+import { postAdminLoginAsync } from '@/store/slice/admin'
+import type { TBody } from '@/api/admin'
 
 const Login = () => {
   const message = useMessage()
   const navigate = useNavigate()
-  
+  const dispatch = useDispatch<TDispatch>()
+
   // 获取store中state里的数据
   const { loading } = useSelector((state: TStoreState) => state.config)
 
-  const onFinish = async (body: any) => {
-      const data:any  = await request.post('/admin/login', body)
-      if (data.ok === 1) {
-        localStorage.setItem('token', data.token)
-        message.success(data.msg)
-        navigate('/')
-      } 
+  const onFinish = async (body: TBody) => {
+    const data: any = dispatch(postAdminLoginAsync(body))
+    message.success(data.msg)
+    navigate('/')
   }
 
   return (

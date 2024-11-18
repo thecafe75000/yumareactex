@@ -1,15 +1,17 @@
+import { useSelector } from 'react-redux'
 import withAuth from '@/components/Hoc'
-import {Button} from 'antd'
-import { useNavigate } from 'react-router-dom'
+import type { TStoreState } from '@/store'
 
 const Home = () => {
-  const navigate = useNavigate()
-  const handleClick = () => {
-    localStorage.clear()
-    navigate('/login')
-  }
+  const adminInfo: any = useSelector((state: TStoreState) => state.admin)
+  
   return (
-    <Button type='primary' onClick={handleClick}> Log out</Button>
+    <div style={{textAlign:'center'}}>
+      <h3>{adminInfo.info?.adminName}</h3>
+      {adminInfo.info.avatar && (
+        <img height={200} src={'/api' + adminInfo.info.avatar} alt='' />
+      )}
+    </div>
   )
 }
 
