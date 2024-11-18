@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react'
+import React,{useEffect, useMemo, useState} from 'react'
 import { Layout, Flex, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 import logo from '@/assets/img/logo.png'
@@ -41,16 +41,19 @@ const IndexSider = () => {
   useEffect(() => {
     setSubMenu('/' + pathname.split('/')[1])
   }, [pathname])
-  
-  const items = useMenuRoutes().map(item => {
-    let childrenArr 
-    if (item.children) {
-      childrenArr = item.children.filter(item=>!item.isHide).map(child => {
-        return getItem(child.title, child.path)
-      })
-    }
-    return getItem(item.title, item.path, item.icon, childrenArr)
-  })
+
+  const menuRoutes = useMenuRoutes()
+  const items = useMemo(() => (menuRoutes.map((item) => {
+       let childrenArr
+       if (item.children) {
+         childrenArr = item.children
+           .filter((item) => !item.isHide)
+           .map((child) => {
+             return getItem(child.title, child.path)
+           })
+       }
+       return getItem(item.title, item.path, item.icon, childrenArr)
+     })),[])
 
   return (
     <Sider
