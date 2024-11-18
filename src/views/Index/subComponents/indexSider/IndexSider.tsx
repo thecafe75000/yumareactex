@@ -1,12 +1,9 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { Layout, Flex, Menu } from 'antd'
-import {
-  PieChartOutlined,
-  UserOutlined
-} from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import logo from '@/assets/img/logo.png'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useMenuRoutes } from '@/routes'
 
 const { Sider } = Layout
 
@@ -26,16 +23,35 @@ function getItem(
   } as MenuItem
 }
 
-const items: MenuItem[] = [
-  getItem('Home', '/', <PieChartOutlined />),
-  getItem('Users', 'sub1', <UserOutlined />, [
-    getItem('User-list', '/user/list'),
-  ]),
-]
+// const items: MenuItem[] = [
+//   getItem('Home', '/', <PieChartOutlined />),
+//   getItem('Users', '/user', <UserOutlined />, [
+//     getItem('User-list', '/user/list'),
+//   ]),
+//   getItem('Orders', '/order', <UserOutlined />, [
+//     getItem('Order-list', '/order/list'),
+//   ]),
+// ]
 
 const IndexSider = () => {
   const [collapsed, setCollapsed] = useState(false)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const [subMenu, setSubMenu] = useState<string>('/' + pathname.split('/')[1])
+  useEffect(() => {
+    setSubMenu('/' + pathname.split('/')[1])
+  }, [pathname])
+  
+  const items = useMenuRoutes().map(item => {
+    let childrenArr 
+    if (item.children) {
+      childrenArr = item.children.filter(item=>!item.isHide).map(child => {
+        return getItem(child.title, child.path)
+      })
+    }
+    return getItem(item.title, item.path, item.icon, childrenArr)
+  })
+
   return (
     <Sider
       collapsible
@@ -50,10 +66,14 @@ const IndexSider = () => {
       </Flex>
       <Menu
         theme='dark'
-        defaultSelectedKeys={['1']}
+        selectedKeys={[pathname]}
+        openKeys={[subMenu]}
+        onOpenChange={(openKeys:string[])=>{setSubMenu(openKeys[1])}}
         mode='inline'
         items={items}
-        onClick={(e)=>{navigate(e.key)}}
+        onClick={(e) => {
+          navigate(e.key)
+        }}
       />
     </Sider>
   )

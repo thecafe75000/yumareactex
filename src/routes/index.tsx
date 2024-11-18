@@ -1,6 +1,7 @@
 import { lazy, Suspense, useMemo } from 'react'
 import { Outlet, useRoutes,Navigate } from 'react-router-dom'
 import Loading from '@/components/Loading'
+import { PieChartOutlined, ProductOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons'
 
 // comName:路由组件的名字
 const useRenderElement = (comName: string) => {
@@ -15,40 +16,93 @@ const useRenderElement = (comName: string) => {
   )
 }
 
+export const useMenuRoutes = () => {
+  // 侧边栏菜单用到的数组
+  const menuRoutes = [
+    {
+      // 首页
+      path: '/',
+      title: 'Home',
+      icon: <PieChartOutlined />,
+      element: useRenderElement('Home')
+    },
+    {
+      // 用户管理
+      path: '/user',
+      title: 'Users',
+      icon: <UserOutlined />,
+      element: <Outlet />,
+      children: [
+        {
+          path: '/user',
+          isHide: true,
+          element: <Navigate to='/user/list' />
+        },
+        {
+          // 用户列表
+          path: '/user/list',
+          title: 'User-list',
+          element: useRenderElement('User/List')
+        }
+      ]
+    },
+    {
+      // 订单管理
+      path: '/order',
+      title: 'Orders',
+      icon: <UnorderedListOutlined />,
+      element: <Outlet />,
+      children: [
+        {
+          path: '/order',
+          isHide: true,
+          element: <Navigate to='/order/list' />
+        },
+        {
+          // 订单列表
+          path: '/order/list',
+          title: 'Order-list',
+          element: useRenderElement('Order/List')
+        }
+      ]
+    },
+    {
+      // 产品管理
+      path: '/product',
+      title: 'Products',
+      icon: <ProductOutlined />,
+      element: <Outlet />,
+      children: [
+        {
+          path: '/product',
+          isHide: true,
+          element: <Navigate to='/product/category' />
+        },
+        {
+          path: '/product/category',
+          title: 'Product Category',
+          element: useRenderElement('Product/Category')
+        }
+      ]
+    }
+  ]
+  return menuRoutes
+}
+
+
 const Router = () => {
   const routes = useRoutes([
     {
       path: '/',
       element: useRenderElement('Index'),
-      children: [
-        {
-          // 首页
-          index: true, // 指页面Home的路由和其父级路由的path是一样的
-          element: useRenderElement('Home')
-        },
-        {
-          // 用户管理
-          path: '/user',
-          element: <Outlet />,
-          children: [
-            {
-              index: true,
-              element: <Navigate to='/user/list' />
-            },
-            {
-              // 用户列表
-              path: '/user/list',
-              element: useRenderElement('User/List')
-            }
-          ]
-        }
-      ]
+      children: useMenuRoutes()
     },
     {
       path: '/login',
       element: useRenderElement('Login')
     },
     {
+      // 404 页面
       path: '*',
       element: useRenderElement('NotFound')
     }

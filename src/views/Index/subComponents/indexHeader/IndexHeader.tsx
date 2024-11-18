@@ -11,7 +11,8 @@ import type { TStoreState } from '@/store'
 const IndexHeader = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const adminInfo: any =  useSelector((state: TStoreState ) => state.admin)
+  const adminInfo: any = useSelector((state: TStoreState) => state.admin)
+  
   const { Header } = Layout
   
   const items = [
@@ -51,7 +52,7 @@ const IndexHeader = () => {
             <a onClick={(e) => e.preventDefault()} href='/'>
               {
                 adminInfo.info && (
-                <Avatar src= {<img src={'/api' + adminInfo.info?.avatar} alt='avatar' /> } />
+                <Avatar src= {<img src={'/api' + adminInfo.info.avatar} alt='avatar' /> } />
               )}
             </a>
           </Dropdown>

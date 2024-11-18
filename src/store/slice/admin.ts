@@ -7,7 +7,7 @@ const admin = createSlice({
   name: 'admin',
   initialState: {
     token: localStorage.getItem('token'),
-    info: undefined
+    info: {}
   }, 
   reducers: {
     setToken: (state, { payload }) => {

@@ -3,14 +3,14 @@ import withAuth from '@/components/Hoc'
 import type { TStoreState } from '@/store'
 
 const Home = () => {
-  const adminInfo: any = useSelector((state: TStoreState) => state.admin)
+  const { info } = useSelector((state: TStoreState) => state.admin) as any
   
   return (
     <div style={{textAlign:'center'}}>
-      <h3>{adminInfo.info?.adminName}</h3>
-      {adminInfo.info.avatar && (
-        <img height={200} src={'/api' + adminInfo.info.avatar} alt='' />
-      )}
+      <h3>{info?.adminName}</h3>
+      {
+        info.avatar && <img height={200} src={'/api'+info.avatar} alt='' />
+      }
     </div>
   )
 }
