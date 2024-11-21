@@ -23,7 +23,7 @@ const Login = () => {
 
   return (
     <Flex style={{ height: '100%' }} vertical justify='center' align='center'>
-      <h2 style={{ color: '#592620', fontWeight: 'bold', fontSize: '30px' }}>
+      <h2 style={{ color: '#126e82', fontWeight: 'bold', fontSize: '30px' }}>
         Yuma Adminstrative Management System
       </h2>
       <Form

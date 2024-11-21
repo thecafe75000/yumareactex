@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo } from 'react'
-import { Outlet, useRoutes,Navigate } from 'react-router-dom'
+import { Outlet, useRoutes,Navigate, useLocation } from 'react-router-dom'
 import Loading from '@/components/Loading'
 import { PieChartOutlined, ProductOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons'
 
@@ -87,6 +87,31 @@ export const useMenuRoutes = () => {
     }
   ]
   return menuRoutes
+}
+
+export const useRouteTitle = () => {
+  const { pathname } = useLocation()
+  const menuRoutes = useMenuRoutes()
+  return useMemo(() => {
+    const titleArr = []
+    // 一级路由
+    const [, whereOne] = pathname.split('/')
+    const firstlevelRoute = menuRoutes.find(
+      (value) => value.path === '/' + whereOne
+    ) as any
+    titleArr.push({ title: firstlevelRoute.title })
+    // 二级路由
+    if (firstlevelRoute.children) {
+      const seclevelRoute = firstlevelRoute.children.find(
+        (value: any) => value.path === pathname && !value.isHide
+      )
+      // 判断二级路由是否存在,如果存在则添加其title
+      if (seclevelRoute) {
+        titleArr.push({ title: seclevelRoute.title })
+      } 
+    }
+    return titleArr
+  }, [pathname])
 }
 
 

@@ -23,16 +23,6 @@ function getItem(
   } as MenuItem
 }
 
-// const items: MenuItem[] = [
-//   getItem('Home', '/', <PieChartOutlined />),
-//   getItem('Users', '/user', <UserOutlined />, [
-//     getItem('User-list', '/user/list'),
-//   ]),
-//   getItem('Orders', '/order', <UserOutlined />, [
-//     getItem('Order-list', '/order/list'),
-//   ]),
-// ]
-
 const IndexSider = () => {
   const [collapsed, setCollapsed] = useState(false)
   const navigate = useNavigate()
@@ -75,6 +65,9 @@ const IndexSider = () => {
         mode='inline'
         items={items}
         onClick={(e) => {
+          if (e.key === '/') {
+            setSubMenu('/')
+          }
           navigate(e.key)
         }}
       />

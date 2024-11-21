@@ -8,8 +8,8 @@ import './index.less'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <ConfigProvider theme={{ token: { colorPrimary: '#bdaead' } }}>
-    <AntdApp message={{ maxCount: 1, duration:1 }}>
+  <ConfigProvider theme={{ token: { colorPrimary: '#51c4d3' } }}>
+    <AntdApp message={{ maxCount: 1, duration: 1 }}>
       <Provider store={store}>
         <BrowserRouter>
           <App />

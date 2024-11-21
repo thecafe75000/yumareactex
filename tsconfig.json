@@ -1,4 +1,5 @@
 {
+  // "extends": "./path.config.json",
   "compilerOptions": {
     // 路径别名
     "paths":{

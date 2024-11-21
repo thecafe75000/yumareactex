@@ -7,7 +7,7 @@ const admin = createSlice({
   name: 'admin',
   initialState: {
     token: localStorage.getItem('token'),
-    info: {}
+    info: null
   }, 
   reducers: {
     setToken: (state, { payload }) => {
@@ -32,7 +32,7 @@ const admin = createSlice({
 // 调用登陆接口
 export const postAdminLoginAsync = (body: TBody) => {
   return async function (dispatch: TDispatch) {
-    const data: any = await postAdminLogin(body)
+    const data:any = await postAdminLogin(body) 
     dispatch(setToken(data.token))
     return data
   }
@@ -41,9 +41,8 @@ export const postAdminLoginAsync = (body: TBody) => {
 // 调用获取管理员admin信息接口
 export const getAdminInfoAsync = () => {
   return async function (dispatch:TDispatch) {
-    const data: any = await getAdminInfo()
-    // console.log('data admin', data)
-    dispatch(setInfo(data.info))
+    const { info } = await getAdminInfo() as any
+    dispatch(setInfo(info))
   }
 }
 

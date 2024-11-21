@@ -1,4 +1,3 @@
-import React from 'react'
 import { Layout, Flex, Breadcrumb, Dropdown, Avatar } from 'antd'
 import { HomeOutlined, LoginOutlined } from '@ant-design/icons'
 import { Link, useNavigate } from 'react-router-dom'
@@ -6,14 +5,16 @@ import { useAppDispatch } from '@/utils'
 import { loginOut } from '@/store/slice/admin'
 import { useSelector } from 'react-redux'
 import type { TStoreState } from '@/store'
+import { useRouteTitle } from '@/routes'
 
 
 const IndexHeader = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const adminInfo: any = useSelector((state: TStoreState) => state.admin)
-  
   const { Header } = Layout
+
+  const breadItems = useRouteTitle()
   
   const items = [
     {
@@ -42,17 +43,17 @@ const IndexHeader = () => {
   return (
     <Header style={{ padding: '0 10px', background: '#fff' }}>
       <Flex justify='space-between' align='center'>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>User</Breadcrumb.Item>
-          <Breadcrumb.Item>Bill</Breadcrumb.Item>
-        </Breadcrumb>
+        <Breadcrumb items={breadItems} style={{ margin: '16px 0' }} />
         <div>
           Welcome back {adminInfo.info?.adminName}!
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()} href='/'>
-              {
-                adminInfo.info && (
-                <Avatar src= {<img src={'/api' + adminInfo.info.avatar} alt='avatar' /> } />
+              {adminInfo.info && (
+                <Avatar
+                  src={
+                    <img src={'/api' + adminInfo.info.avatar} alt='avatar' />
+                  }
+                />
               )}
             </a>
           </Dropdown>
