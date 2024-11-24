@@ -89,6 +89,7 @@ export const useMenuRoutes = () => {
   return menuRoutes
 }
 
+// 根据path获取对应的标题
 export const useRouteTitle = () => {
   const { pathname } = useLocation()
   const menuRoutes = useMenuRoutes()
@@ -96,15 +97,12 @@ export const useRouteTitle = () => {
     const titleArr = []
     // 一级路由
     const [, whereOne] = pathname.split('/')
-    const firstlevelRoute = menuRoutes.find(
-      (value) => value.path === '/' + whereOne
-    ) as any
+    const firstlevelRoute = menuRoutes.find((value) => value.path === '/' + whereOne) as any
     titleArr.push({ title: firstlevelRoute.title })
     // 二级路由
     if (firstlevelRoute.children) {
       const seclevelRoute = firstlevelRoute.children.find(
-        (value: any) => value.path === pathname && !value.isHide
-      )
+        (value: any) => value.path === pathname && !value.isHide )
       // 判断二级路由是否存在,如果存在则添加其title
       if (seclevelRoute) {
         titleArr.push({ title: seclevelRoute.title })
