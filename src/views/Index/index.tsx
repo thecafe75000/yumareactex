@@ -25,7 +25,7 @@ const Index: React.FC = () => {
         {/* 主体 */}
         <IndexContent />
         {/* 底部 */}
-        <IndexFooter />
+        <IndexFooter/>
       </Layout>
     </Layout>
   )

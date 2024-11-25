@@ -3,7 +3,9 @@ import { Layout, Flex, Menu } from 'antd'
 import type { MenuProps } from 'antd'
 import logo from '@/assets/img/logo.png'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useMenuRoutes } from '@/routes'
+import { useMenuRoutes, useRouteTitle } from '@/routes'
+import { useAppDispatch } from '@/utils'
+import { addItem } from '@/store/slice/config'
 
 const { Sider } = Layout
 
@@ -28,8 +30,14 @@ const IndexSider = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const [subMenu, setSubMenu] = useState<string>('/' + pathname.split('/')[1])
+  const dispatch = useAppDispatch()
+  const [, titleInfo] = useRouteTitle()
+
   useEffect(() => {
+    // 指定哪个菜单可以展开
     setSubMenu('/' + pathname.split('/')[1])
+    // 切换导航栏数组items增加元素
+    dispatch(addItem({ pathname, titleInfo }))
   }, [pathname])
 
   const menuRoutes = useMenuRoutes()

@@ -17,7 +17,7 @@ const user = createSlice({
 export const getUserListAsync = (pageNo:number, pageSize:number, keyword?:string) =>{
   return async function (dispatch:TDispatch) {
     const result: any = await getUserList(pageNo, pageSize, keyword)
-    console.log('result', result) // 为什么result.data是undefined? 
+    // console.log('result', result)
     dispatch(setUserList(result.userList))
     return result
   }
