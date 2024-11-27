@@ -6,7 +6,6 @@ import { Button, Form, Flex, Input, Table, Switch } from 'antd'
 import { SearchOutlined, AntDesignOutlined } from '@ant-design/icons'
 import type { TStoreState } from '@/store'
 
-
 const UserList = () => {
   const dispatch = useAppDispatch()
   const message = useMessage()
@@ -101,6 +100,7 @@ const UserList = () => {
                         pageInfo.current
                       )
                     )
+                    await dispatch(getUserListAsync(pageInfo.current, pageInfo.pageSize, searchForm.getFieldValue('keyword')))
                     message.success(result.message)
                   }}
                 />

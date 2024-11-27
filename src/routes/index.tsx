@@ -1,7 +1,12 @@
 import { lazy, Suspense, useMemo } from 'react'
 import { Outlet, useRoutes,Navigate, useLocation } from 'react-router-dom'
 import Loading from '@/components/Loading'
-import { PieChartOutlined, ProductOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons'
+import {
+  ProductOutlined,
+  UnorderedListOutlined,
+  UserOutlined,
+  HomeOutlined
+} from '@ant-design/icons'
 
 // comName:路由组件的名字
 const useRenderElement = (comName: string) => {
@@ -23,7 +28,7 @@ export const useMenuRoutes = () => {
       // 首页
       path: '/',
       title: 'Home',
-      icon: <PieChartOutlined />,
+      icon: <HomeOutlined />,
       element: useRenderElement('Home')
     },
     {
