@@ -12,6 +12,7 @@ const UserList = () => {
   const { userList } = useSelector((state: TStoreState) => state.user)
   const { loading } = useSelector((state: TStoreState) => state.config)
   const { pageInfo } = useSelector((state: TStoreState) => state.config)
+ 
   
   useEffect(() => {
     dispatch(getUserListAsync(1, pageInfo.pageSize))
