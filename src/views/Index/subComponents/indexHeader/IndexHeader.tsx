@@ -48,7 +48,7 @@ const IndexHeader = () => {
           Welcome back {adminInfo.info?.adminName}!
           <Dropdown menu={{ items }}>
             <a onClick={(e) => e.preventDefault()} href='/'>
-              {adminInfo.info && (
+              {adminInfo.info.avatar && (
                 <Avatar
                   src={
                     <img src={'/api' + adminInfo.info.avatar} alt='avatar' />
