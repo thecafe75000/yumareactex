@@ -12,6 +12,7 @@ export const putProductShowFlag = (categoryId: string, showFlag: number) => {
 
 // 添加商品分类 http://127.0.0.1:9292/product/category
 export type TCategoryInfo = {
+  _id?: string
   parentId?: string
   name: string
   showFlag: number
@@ -19,4 +20,14 @@ export type TCategoryInfo = {
 }
 export const postProductCategory = (body:TCategoryInfo) => {
   return request.post('/product/category', body)
+}
+
+// 修改商品分类 http://127.0.0.1:9292/product/category
+export const putProductCategory = (body: TCategoryInfo) => {
+  return request.put('/product/category', body)
+}
+
+// 根据id删除商品分类 http://127.0.0.1:9292/product/category/:id
+export const deleteProductCategory = (id: string) => {
+  return request.delete(`/product/category/${id}`)
 }

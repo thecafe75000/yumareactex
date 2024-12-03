@@ -10,7 +10,8 @@ import {
   Tooltip,
   Modal,
   Cascader,
-  InputNumber
+  InputNumber,
+  Popconfirm
 } from 'antd'
 import {
   DeleteOutlined,
@@ -19,7 +20,7 @@ import {
   PlusOutlined
 } from '@ant-design/icons'
 import { useAppDispatch, useMessage } from '@/utils'
-import { getProductAllCategoryListAsync, postProductCategoryAsync, putProductShowFlagAsync } from '@/store/slice/category'
+import { deteleProductCategoryAsync, getProductAllCategoryListAsync, postProductCategoryAsync, putProductCategoryAsync, putProductShowFlagAsync } from '@/store/slice/category'
 import type { TStoreState } from '@/store'
 
 
@@ -33,17 +34,22 @@ const Category = () => {
   const [isModelOpen, setIsModalOpen] = useState(false)
   // 获取表单实例
   const [form] = Form.useForm()
-  const parentIdArr = useMemo(() => categoryList.map((item:any)=> {
-    return {
+  const [modalTitle, setModalTitle] = useState('Add product category')
+
+  const parentIdArr = useMemo(() => categoryList.map((item: any) => {
+    let obj:any = {
       label: item.name,
-      value: item._id,
-      children: item.children.map((child:any) => {
+      value: item._id
+    }
+    if (item.children) {
+      obj.children = item.children.map((child: any) => {
         return {
           label: child.name,
           value: child._id
         }
       })
     }
+    return obj
   }), [categoryList])
   // console.log('parentidarr',parentIdArr)
 
@@ -65,6 +71,7 @@ const Category = () => {
   }
 
   const buttonClick = () => {
+    setModalTitle('Add product category')
     setIsModalOpen(true)
   }
 
@@ -84,12 +91,17 @@ const Category = () => {
     if (Array.isArray(body.parentId)) {
       body.parentId = body.parentId[body.parentId.length -1]
     }
-    console.log('finish-body',body)
-    await dispatch(postProductCategoryAsync(body))
-    // 重置表单内容
+    // console.log('finish-body',body)
+    // 存在_id就是修改商品分类,不存在就是添加商品分类
+    if (body._id) {
+      await dispatch(putProductCategoryAsync(body))
+    } else {
+      await dispatch(postProductCategoryAsync(body))
+    }
+    // 重置弹出框里表单的内容,即回填数据
     form.resetFields()
     setIsModalOpen(false)
-    message.success('Add product category successfully!')
+    message.success( modalTitle + 'successfully!')
   }
 
   return (
@@ -150,22 +162,59 @@ const Category = () => {
           {
             title: 'Operation',
             align: 'center',
-            render() {
+            render(rows) {
+              // console.log('rows',rows)
               return (
                 <Space>
-                  <Button icon={<FileAddOutlined />}>
-                    + a new subcategory
-                  </Button>
-                  <Button icon={<EditOutlined />} type='primary'>
+                  {rows.catLevel === 3 || (
+                    <Button
+                      onClick={() => {
+                        //  console.log('button-add rows', rows)
+                        form.setFieldValue('parentId', [...rows.ids, rows._id])
+                        setModalTitle('Add product category')
+                        setIsModalOpen(true)
+                      }}
+                      icon={<FileAddOutlined />}
+                    >
+                      + a new subcategory
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => {
+                      form.setFieldValue('sort', rows.sort)
+                      form.setFieldValue('name', rows.name)
+                      form.setFieldValue(
+                        'showFlag',
+                        rows.showFlag === 1 ? true : false
+                      )
+                      form.setFieldValue('parentId', rows.ids)
+                      form.setFieldValue('_id', rows._id)
+                      setIsModalOpen(true)
+                      setModalTitle('Modify product category')
+                    }}
+                    icon={<EditOutlined />}
+                    type='primary'
+                  >
                     Edit
                   </Button>
-                  <Button
-                    icon={<DeleteOutlined />}
-                    type='primary'
-                    danger={true}
+                  <Popconfirm
+                    title='Delete the info'
+                    description='Are you sure to delete this info?'
+                    onConfirm={() => {
+                      dispatch(deteleProductCategoryAsync(rows._id))
+                    }}
+                    okText='Yes'
+                    cancelText='No'
                   >
-                    Delete
-                  </Button>
+                    <Button
+                      disabled={rows.children ? true : false}
+                      icon={<DeleteOutlined />}
+                      type='primary'
+                      danger={true}
+                    >
+                      Delete
+                    </Button>
+                  </Popconfirm>
                 </Space>
               )
             }
@@ -175,7 +224,7 @@ const Category = () => {
         dataSource={categoryList}
       />
       <Modal
-        title='Add product category'
+        title={modalTitle}
         maskClosable={false}
         open={isModelOpen}
         // closable={false}
@@ -196,6 +245,9 @@ const Category = () => {
           onFinish={(body) => onFinish(body)}
           autoComplete='off'
         >
+          <Form.Item name='_id' hidden>
+            <Input />
+          </Form.Item>
           <Form.Item
             label='Previous Category'
             // name 的值要看接口文档
