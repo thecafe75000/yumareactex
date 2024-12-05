@@ -94,7 +94,7 @@ const Category = () => {
                 // 第1种写法
                 // <Switch
                 //   onChange={(isChecked) => dispatch(putProductShowFlagAsync(rows._id, isChecked?1:0))}
-                //   checked={showFlag === 1}
+                //   checked={showFlag === 1?true:false}
                 // ></Switch>
 
                 // 第2种写法

@@ -87,7 +87,12 @@ export const useMenuRoutes = () => {
           path: '/product/category',
           title: 'Product Category',
           element: useRenderElement('Product/Category')
-        }
+        },
+        {
+          path: '/product/trademark',
+          title: 'Brands',
+          element: useRenderElement('Product/Trademark')
+        },
       ]
     }
   ]
