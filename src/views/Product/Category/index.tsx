@@ -12,7 +12,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   FileAddOutlined,
-  PlusOutlined
+  PlusCircleOutlined
 } from '@ant-design/icons'
 import { useAppDispatch, useMessage } from '@/utils'
 import { deteleProductCategoryAsync, getProductAllCategoryListAsync, putProductShowFlagAsync } from '@/store/slice/category'
@@ -57,7 +57,7 @@ const Category = () => {
   return (
     <Space direction='vertical' style={{ width: '100%' }}>
       <Tooltip title='Add product category'>
-        <Button onClick={buttonClick} icon={<PlusOutlined />} type='primary'>
+        <Button onClick={buttonClick} icon={<PlusCircleOutlined  />} type='primary'>
           Add product category
         </Button>
       </Tooltip>
