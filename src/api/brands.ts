@@ -10,3 +10,15 @@ export const getBrandsList = (pageNo:number, pageSize: number, keyword?:string) 
     }
   })
 }
+
+
+// 添加商品品牌 /product/trademark
+export interface BrandData {
+  name: string
+  img: string
+  showFlag: number
+  sort: number
+}
+export const addNewBrand = (body: BrandData) => {
+  return request.post('/product/trademark', body)
+}

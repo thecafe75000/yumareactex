@@ -24,6 +24,8 @@ const store = configureStore({
 // 定义store里state的类型是TStoreState
 export type TStoreState = ReturnType<typeof store.getState>
 
+export type TGetState = typeof store.getState
+
 // 定义store里dispatch的类型是TDispatch
 export type TDispatch = typeof store.dispatch
 

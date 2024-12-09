@@ -46,6 +46,8 @@ const UserList = () => {
         </Form.Item>
         <Form.Item>
           <Button onClick={() => {
+            // 重置表单,  searchForm是表单实例
+            searchForm.resetFields()
             dispatch(getUserListAsync(1, pageInfo.pageSize))
           }} icon={<AntDesignOutlined />} htmlType='reset'>
             Reset

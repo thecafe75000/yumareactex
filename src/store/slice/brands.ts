@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { TDispatch } from '@/store'
-import { getBrandsList } from '@/api/brands'
+import type { TDispatch, TGetState} from '@/store'
+import { addNewBrand, BrandData, getBrandsList } from '@/api/brands'
 import { setPageInfo } from '@/store/slice/config'
+
 
 const brandsSlice = createSlice({
   name: 'brands',
@@ -27,6 +28,16 @@ export const getBrandsListAsync = (pageNo:number, pageSize: number, keyword?:str
       current,
       total
     }))
+  }
+}
+
+// 添加商品品牌的异步action
+export const addNewBrandAsync = (body: BrandData) => {
+  return async (dispatch: TDispatch, getState:TGetState) => {
+    const result = await addNewBrand(body)
+    const {pageSize} = getState().config.pageInfo
+    await dispatch(getBrandsListAsync(1, pageSize))
+    return result
   }
 }
 
