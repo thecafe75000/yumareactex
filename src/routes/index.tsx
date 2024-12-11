@@ -93,6 +93,11 @@ export const useMenuRoutes = () => {
           title: 'Brands',
           element: useRenderElement('Product/Trademark')
         },
+        {
+          path: '/product/attributes',
+          title: 'Attributes',
+          element: useRenderElement('Product/Attributes')
+        },
       ]
     }
   ]

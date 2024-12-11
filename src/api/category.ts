@@ -31,3 +31,12 @@ export const putProductCategory = (body: TCategoryInfo) => {
 export const deleteProductCategory = (id: string) => {
   return request.delete(`/product/category/${id}`)
 }
+
+// 根据parentId 获取商品分类列表 /product/categoryList?parentId=
+export const getCategoryListByParentId = (parentId?:string) => {
+  return request.get('/product/categoryList', {
+    params: {
+      parentId
+    }
+  })
+}

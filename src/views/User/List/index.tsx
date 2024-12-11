@@ -94,7 +94,7 @@ const UserList = () => {
               return (
                 <Switch
                   defaultChecked={status === 0}
-                  onChange ={async (checked) => {
+                  onChange ={async () => {
                     // console.log('pageInfoCurrent',pageInfo.current)
                     // 调用更新状态的接口以更新数据
                     const result: any = await dispatch(putStateUserInfoByIdAsync(
