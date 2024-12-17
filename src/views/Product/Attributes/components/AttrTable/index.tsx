@@ -74,7 +74,7 @@ const AttrTable = (props: TProps) => {
           {
             title: 'Attribute Value Name',
             dataIndex: 'attrValueList',
-            // align: 'center',
+            align: 'center',
             width: 700,
             render(attrValueList) {
               return attrValueList
