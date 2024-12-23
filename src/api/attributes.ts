@@ -12,3 +12,5 @@ export type TAttributesParams =  {
 export const getAttributesList = (params: TAttributesParams) => {
   return request.get('/product/attr', { params })
 }
+
+// 添加属性

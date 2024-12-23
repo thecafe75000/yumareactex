@@ -1,27 +1,29 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { DeleteFilled, EditFilled, FileAddFilled  } from '@ant-design/icons'
-import { Button, Flex, Space, Table, Tag } from 'antd'
+import { Button, Flex, Space, Table, Tag} from 'antd'
 import { useAppDispatch } from '@/utils'
 import type { TStoreState } from '@/store'
 import { getAttributesListAsync } from '@/store/slice/attributes'
+import request from '@/axios/request'
+
 
 type TProps = {
-  category1Id: string
-  category2Id: string
-  category3Id: string
+  category1Id: string | undefined
+  category2Id: string | undefined
+  category3Id: string | undefined
   setAddAttrClick: React.Dispatch<React.SetStateAction<boolean>>
+  setAttrInfo: any
 }
 const AttrTable = (props: TProps) => {
-  const { category1Id, category2Id, category3Id, setAddAttrClick } = props
-  const { pageInfo } = useSelector((state: TStoreState) => state.config) as any
-  const { attributesList } = useSelector((state: TStoreState) => state.attributes) as any
-
+  const { category1Id, category2Id, category3Id, setAddAttrClick, setAttrInfo } = props
+  const { pageInfo } = useSelector((state: TStoreState) => state.config) 
+  const { attributesList } = useSelector((state: TStoreState) => state.attributes) 
+ 
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(
-      getAttributesListAsync({
+    dispatch( getAttributesListAsync({
         pageNo: 1,
         pageSize: pageInfo.pageSize,
         category1Id,
@@ -33,13 +35,15 @@ const AttrTable = (props: TProps) => {
 
   return (
     <Flex vertical gap='middle'>
+      {/* 添加属性的按钮 */}
       <Button
-        disabled={category3Id === ''}
+        disabled={category3Id === undefined}
         icon={<FileAddFilled />}
         type='primary'
         style={{ width: 150 }}
         onClick={() => {
           setAddAttrClick(true)
+          setAttrInfo(null)
         }}
       >
         Add attributes
@@ -103,15 +107,36 @@ const AttrTable = (props: TProps) => {
             align: 'center',
             dataIndex: '_id',
             fixed: 'right',
-            render() {
+            // render函数的参数分别为当前单元格的值，当前行数据，行索引
+            render(_id, rows: any) {
               return (
                 <Space>
-                  <Button icon={<EditFilled />} type='primary' shape='circle' />
+                  <Button
+                    icon={<EditFilled />}
+                    type='primary'
+                    shape='circle'
+                    onClick={() => {
+                      setAddAttrClick(true)
+                      setAttrInfo({ ...rows })
+                    }}
+                  />
                   <Button
                     icon={<DeleteFilled />}
                     type='primary'
                     danger
                     shape='circle'
+                    onClick={async () => {
+                      await request.delete(`/product/attr/${_id}`)
+                      dispatch(
+                        getAttributesListAsync({
+                          pageNo: 1,
+                          pageSize: pageInfo.pageSize,
+                          category1Id,
+                          category2Id,
+                          category3Id
+                        })
+                      )
+                    }}
                   />
                 </Space>
               )

@@ -28,25 +28,13 @@ const Category = () => {
   const message = useMessage()
   const [info, setInfo] = useState({})
   const [parentId, setParentId] = useState<string[]>([])
-  const [modalTitle, setModalTitle] = useState<string>('Add product category') 
+  // const [modalTitle, setModalTitle] = useState<string>('Add product category') 
   // 控制对话框modal的显示与隐藏
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     dispatch(getProductAllCategoryListAsync())
   }, [])
-
-  const onChangeHandle = async (rows: any, isChecked: boolean) => {
-    setKey(rows._id)
-    await dispatch(putProductShowFlagAsync(rows._id, isChecked ? 1 : 0))
-    // 数字2表示message在屏幕上停留的时间为2秒
-    message.success((
-      <>
-        <span style={{color:'red'}}>put successfully {rows.name} at {isChecked ? 'display' : 'hide'} </span>
-      </> 
-    ),2)
-    setKey('')
-  }
 
   const buttonClick = () => {
     setInfo({})
@@ -100,7 +88,17 @@ const Category = () => {
                 // 第2种写法
                 <Switch
                   loading={loading && key === rows._id}
-                  onChange={(isChecked) => onChangeHandle(rows, isChecked)}
+                  onChange={async (isChecked) => {
+                    setKey(rows._id)
+                    await dispatch(putProductShowFlagAsync(rows._id, isChecked ? 1 : 0))
+                    // 数字2表示2秒, 即信息显示时间为2秒
+                    message.success((
+                      <>
+                        <span>{ rows.name}</span>信息设置为{isChecked?'显示':'隐藏'} 
+                      </>
+                    ), 2)
+                    setKey('')
+                  }}
                   checked={showFlag === 1}
                 ></Switch>
               )
@@ -143,6 +141,7 @@ const Category = () => {
                     Edit
                   </Button>
                   <Popconfirm
+                    placement='topRight'
                     title='Delete the info'
                     description='Are you sure to delete this info?'
                     onConfirm={() => {
@@ -152,7 +151,7 @@ const Category = () => {
                     cancelText='No'
                   >
                     <Button
-                      disabled={rows.children ? true : false}
+                      disabled={rows.children}
                       icon={<DeleteOutlined />}
                       type='primary'
                       danger={true}
@@ -165,6 +164,7 @@ const Category = () => {
             }
           }
         ]}
+        pagination={false}
         rowKey='_id'
         dataSource={categoryList}
       />
@@ -173,8 +173,8 @@ const Category = () => {
         setIsModalOpen={setIsModalOpen}
         info={info}
         parentId={parentId}
-        modalTitle={modalTitle}
-        setModalTitle={setModalTitle}
+        // modalTitle={modalTitle}
+        // setModalTitle={setModalTitle}
       />
     </Space>
   )

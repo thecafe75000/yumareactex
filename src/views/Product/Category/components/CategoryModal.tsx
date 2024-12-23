@@ -11,40 +11,18 @@ type TProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   info: any
   parentId: string[]
-  modalTitle: string
-  setModalTitle: React.Dispatch<React.SetStateAction<string>>
+  // modalTitle: string
+  // setModalTitle: React.Dispatch<React.SetStateAction<string>>
 }
 
 const CategoryModal = (props: TProps) => {
-  const { isModalOpen, setIsModalOpen, info, parentId, modalTitle, setModalTitle} = props
+  const { isModalOpen, setIsModalOpen, info, parentId } = props
+  const { categoryList } = useSelector((state: TStoreState) => state.category)
   const dispatch = useAppDispatch()
   const message = useMessage()
   // 获取表单实例
   const [form] = Form.useForm()
 
-  useEffect(() => {
-    if (info._id) {
-       form.setFieldValue('sort', info.sort)
-       form.setFieldValue('name', info.name)
-       form.setFieldValue('showFlag', info.showFlag === 1 ? true : false)
-       form.setFieldValue('parentId', info.ids)
-       form.setFieldValue('_id', info._id)
-    } else {
-      form.resetFields()
-    }
-    setModalTitle('Modify product category')
-  }, [info])
-
-  useEffect(() => {
-    if (parentId.length > 0) {
-      form.setFieldValue('parentId', parentId)
-    } else {
-      form.resetFields()
-    }
-    setModalTitle('Add product category')
-  },[parentId])
-
-  const { categoryList } = useSelector((state: TStoreState) => state.category)
   const parentIdArr = useMemo(() => categoryList.map((item: any) => {
         let obj: any = {
           label: item.name,
@@ -60,46 +38,40 @@ const CategoryModal = (props: TProps) => {
         }
         return obj
       }),[categoryList])
-     // console.log('parentidarr',parentIdArr)
+  // console.log('parentidarr',parentIdArr)
 
-  const handleOk = () => {
-    // 提交表单
-    form.submit()
-  }
-
-  const handleCancel = () => {
-    // 重置表单内容
-    form.resetFields()
-    setIsModalOpen(false)
-  }
-
-  const onFinish = async (body: any) => {
-    body.showFlag = body.showFlag ? 1 : 0
-    if (Array.isArray(body.parentId)) {
-      body.parentId = body.parentId[body.parentId.length - 1]
-    }
-    // console.log('finish-body',body)
-    // 存在_id就是修改商品分类,不存在就是添加商品分类
-    if (body._id) {
-      await dispatch(putProductCategoryAsync(body))
+  useEffect(() => {
+    if (info._id) {
+      form.setFieldValue('sort', info.sort)
+      form.setFieldValue('name', info.name)
+      form.setFieldValue('showFlag', info.showFlag === 1 ? true : false)
+      form.setFieldValue('parentId', info.ids)
+      form.setFieldValue('_id', info._id)
     } else {
-      await dispatch(postProductCategoryAsync(body))
+      form.resetFields()
     }
-    // 重置弹出框里表单的内容,即回填数据
-    form.resetFields()
-    setIsModalOpen(false)
-    message.success(modalTitle + 'add new category successfully!')
-  }
+    // setModalTitle('Modify product category')
+  }, [info])
+
+  useEffect(() => {
+    if (parentId.length > 0) {
+      form.setFieldValue('parentId', parentId)
+    } else {
+      form.resetFields()
+    }
+    // setModalTitle('Add product category')
+  }, [parentId])
 
   return (
     <Modal
       forceRender
-      title={modalTitle}
+      // title={modalTitle}
+      title='添加商品分类'
       maskClosable={false}
       open={isModalOpen}
       // closable={false}
-      onOk={handleOk}
-      onCancel={handleCancel}
+      onOk={() => form.submit()}
+      onCancel={()=>{setIsModalOpen(false)}}
     >
       <Form
         name='basic'
@@ -112,7 +84,24 @@ const CategoryModal = (props: TProps) => {
           sort: 0, // 排序的默认值
           showFlag: true
         }}
-        onFinish={(body) => onFinish(body)}
+        onFinish={async (body) => {
+           body.showFlag = body.showFlag ? 1 : 0
+           if (Array.isArray(body.parentId)) {
+             body.parentId = body.parentId[body.parentId.length - 1]
+           }
+           // console.log('finish-body',body)
+           // 存在_id就是修改商品分类,不存在就是添加商品分类
+          if (body._id) {
+            // 修改
+             await dispatch(putProductCategoryAsync(body))
+           } else {
+             await dispatch(postProductCategoryAsync(body))
+           }
+           // 重置弹出框里表单的内容,即回填数据
+           form.resetFields()
+           setIsModalOpen(false)
+           message.success('add new category successfully!')
+        }}
         autoComplete='off'
       >
         <Form.Item name='_id' hidden>
@@ -126,7 +115,6 @@ const CategoryModal = (props: TProps) => {
           <Cascader
             changeOnSelect
             options={parentIdArr}
-            onChange={() => {}}
             placeholder='If this item is omitted, the top-level category is added'
           />
         </Form.Item>

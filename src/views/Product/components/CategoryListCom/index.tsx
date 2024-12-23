@@ -4,18 +4,19 @@ import { Button, Form, Select, SelectProps } from 'antd'
 import { getCategoryListByParentId } from '@/api/category'
 
 type TProps = {
-  setCategory1Id: React.Dispatch<React.SetStateAction<string>>
-  setCategory2Id: React.Dispatch<React.SetStateAction<string>>
-  setCategory3Id: React.Dispatch<React.SetStateAction<string>>
-  onReset:()=> void
+  setCategory1Id: React.Dispatch<React.SetStateAction<string | undefined>>
+  setCategory2Id: React.Dispatch<React.SetStateAction<string | undefined>>
+  setCategory3Id: React.Dispatch<React.SetStateAction<string | undefined>>
+  category3Id?: string | undefined
+  onChange: () => void
 }
 
 const CategoryListCom = (props: TProps) => {
-  const { setCategory1Id, setCategory2Id, setCategory3Id, onReset} = props
+  const {category3Id, setCategory1Id, setCategory2Id, setCategory3Id, onChange} = props
   const [categoryListOne, setCategoryListOne] = useState<SelectProps['options']>([])
   const [categoryListTwo, setCategoryListTwo] = useState<SelectProps['options']>([])
   const [categoryListThree, setCategoryListThree] = useState<SelectProps['options']>([])
-  const [disabled, setDisabled] = useState<boolean>(false)
+  // const [disabled, setDisabled] = useState<boolean>(false)
   const [form] = Form.useForm()
 
   // 封装函数
@@ -39,7 +40,7 @@ const CategoryListCom = (props: TProps) => {
     <Form layout='inline' form={form}>
       <Form.Item name='category1Id' style={{ width: 200 }}>
         <Select
-          disabled={disabled}
+          disabled={category3Id !== undefined}
           // options 是下拉框里的列表选项
           options={categoryListOne}
           // onChange函数的参数value就是categoryList里的_id的值
@@ -50,8 +51,10 @@ const CategoryListCom = (props: TProps) => {
             getCategoryListForThreeLevels(setCategoryListTwo, value)
             // 更新一级状态
             setCategory1Id(value)
-            setCategory2Id('')
-            setCategory3Id('')
+            setCategory2Id(undefined)
+            setCategory3Id(undefined)
+            // 3级分类
+            setCategoryListThree([])
             // 清空二级和三级选中的内容
             form.setFieldValue('category2Id', undefined)
             form.setFieldValue('category3Id', undefined)
@@ -61,14 +64,14 @@ const CategoryListCom = (props: TProps) => {
       </Form.Item>
       <Form.Item name='category2Id' style={{ width: 200 }}>
         <Select
-          disabled={disabled}
+          disabled={category3Id !== undefined}
           options={categoryListTwo}
           onChange={(value) => {
             // console.log('value2', value)
             getCategoryListForThreeLevels(setCategoryListThree, value)
             // 更新二级状态
             setCategory2Id(value)
-            setCategory3Id('')
+            setCategory3Id(undefined)
             // 清空三级选中的内容
             form.setFieldValue('category3Id', undefined)
           }}
@@ -77,12 +80,12 @@ const CategoryListCom = (props: TProps) => {
       </Form.Item>
       <Form.Item name='category3Id' style={{ width: 200 }}>
         <Select
-          disabled={disabled}
+          disabled={category3Id !== undefined}
           onChange={(value) => {
             // console.log('value3', value)
             // 更新三级状态
             setCategory3Id(value)
-            setDisabled(true)
+            // setDisabled(true)
           }}
           options={categoryListThree}
           placeholder='Select a third level category'
@@ -98,11 +101,11 @@ const CategoryListCom = (props: TProps) => {
             setCategoryListThree([])
 
             // 同时也要重置父级的状态
-            setCategory1Id('')
-            setCategory2Id('')
-            setCategory3Id('')
-            setDisabled(false)
-            onReset()
+            setCategory1Id(undefined)
+            setCategory2Id(undefined)
+            setCategory3Id(undefined)
+            // setDisabled(false)
+            onChange()
           }}
           type='primary'
           icon={<AntDesignOutlined />}
