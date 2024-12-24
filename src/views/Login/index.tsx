@@ -16,7 +16,7 @@ const Login = () => {
   const { loading } = useSelector((state: TStoreState) => state.config)
 
   const onFinish = async (body: TBody) => {
-    const data: any = dispatch(postAdminLoginAsync(body))
+    const data: any = await dispatch(postAdminLoginAsync(body))
     message.success(data.msg)
     navigate('/')
   }
@@ -29,6 +29,10 @@ const Login = () => {
       <Form
         name='login'
         style={{ width: 400, height: 400 }}
+        initialValues={{
+          adminName: 'yuma',
+          password: '11111111'
+        }}
         onFinish={onFinish}
       >
         <Form.Item

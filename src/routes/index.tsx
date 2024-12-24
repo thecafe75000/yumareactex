@@ -98,6 +98,11 @@ export const useMenuRoutes = () => {
           title: 'Attributes',
           element: useRenderElement('Product/Attributes')
         },
+        {
+          path: '/product/spu',
+          title: 'Spu',
+          element: useRenderElement('Product/Spu')
+        },
       ]
     }
   ]
