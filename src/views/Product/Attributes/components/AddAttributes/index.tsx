@@ -5,7 +5,7 @@ import request from '@/axios/request'
 import { useMessage } from '@/utils'
 
 const AddAttributes = (props:any) => {
-  const { setAddAttrClick, attrInfo } = props
+  const { setAddAttrClick, attrInfo} = props
   const [attrName, setAttrName] = useState<string>('')
   const [form] = Form.useForm()
   const message = useMessage()
@@ -29,15 +29,24 @@ const AddAttributes = (props:any) => {
       initialValues={{}}
       // 点击按钮submit会触发onFinish回调, 参数body则是表单收集到的数据
       onFinish={async (body) => {
+        // console.log('body', body)
+        // console.log('attrInfo', attrInfo)
         let result: any
+
+        if (!attrInfo) {
+          message.error('Attribute info is missing, please try it again')
+        }
+
         // 如果有_id, 就修改，没有就提交
         if (body._id) {
-          body.categoryId = attrInfo.categoryId
-          // console.log('categoryId', body.categoryId)
+          // 修改操作
+          body.categoryId = attrInfo.categoryId 
           result = await request.put('/product/attr', body)
         } else {
+          // 添加操作
           body.categoryId = attrInfo.category3Id
           result = await request.post('/product/attr', body)
+          
         }
         setAddAttrClick(false)
         message.success(result.message)

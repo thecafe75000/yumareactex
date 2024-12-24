@@ -44,7 +44,7 @@ const CategoryModal = (props: TProps) => {
     if (info._id) {
       form.setFieldValue('sort', info.sort)
       form.setFieldValue('name', info.name)
-      form.setFieldValue('showFlag', info.showFlag === 1 ? true : false)
+      form.setFieldValue('showFlag', (info.showFlag === 1 ? true : false))
       form.setFieldValue('parentId', info.ids)
       form.setFieldValue('_id', info._id)
     } else {

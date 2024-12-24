@@ -23,7 +23,7 @@ const AttrTable = (props: TProps) => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch( getAttributesListAsync({
+    dispatch(getAttributesListAsync({
         pageNo: 1,
         pageSize: pageInfo.pageSize,
         category1Id,
@@ -43,7 +43,7 @@ const AttrTable = (props: TProps) => {
         style={{ width: 150 }}
         onClick={() => {
           setAddAttrClick(true)
-          setAttrInfo(null)
+          setAttrInfo({category3Id, attributesList:[], sort:'',name:''})
         }}
       >
         Add attributes
@@ -57,7 +57,7 @@ const AttrTable = (props: TProps) => {
         columns={[
           {
             title: 'Number',
-            dataIndex: '_id',
+            // dataIndex: '_id',
             align: 'center',
             width: 90,
             render(id, row, index) {
@@ -117,7 +117,7 @@ const AttrTable = (props: TProps) => {
                     shape='circle'
                     onClick={() => {
                       setAddAttrClick(true)
-                      setAttrInfo({ ...rows })
+                      setAttrInfo({...rows })
                     }}
                   />
                   <Button

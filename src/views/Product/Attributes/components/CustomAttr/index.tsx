@@ -35,7 +35,7 @@ const CustomAttr = (props: TProps) => {
       // 一定要有return, 没有内容的空行不会被删除，会留在原处
       return
     }
-    // console.log('vName,vList', valueName, attrValueList)
+    // console.log('vName:', valueName,'vList:',attrValueList,'attrName:', attrName)
     // 不允许内容重复,即不能输入相同的内容
     // item.id !== id:在更新 valueName 时，同一个输入框的 id 是唯一的,如果用户没有修改内容，这里不应该误判为重复（即不和自身进行比较）
     if (attrValueList.some((item:TAttrValue) => item.valueName === valueName && item.id !== id)) {
@@ -43,8 +43,7 @@ const CustomAttr = (props: TProps) => {
       return
     }
     
-    setAttrValueList(
-      attrValueList.map((item: TAttrValue) => {
+    setAttrValueList(attrValueList.map((item: TAttrValue) => {
         if (item.id === id) {
           item.valueName = valueName
           item.isInput = false
@@ -136,8 +135,7 @@ const CustomAttr = (props: TProps) => {
                         fn(e.target.value.trim(), rows.id)
                       }
                     }}
-                    autoFocus
-                  />
+                    autoFocus/>
                 )
               }
               return valueName

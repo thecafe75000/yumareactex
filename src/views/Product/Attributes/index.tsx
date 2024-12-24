@@ -18,6 +18,7 @@ const Attributes = () => {
     <Flex vertical gap='middle'>
       {/* 三级联动 - 类别选择 */}
       <CategoryListCom
+        category3Id={category3Id}
         setCategory1Id={setCategory1Id}
         setCategory2Id={setCategory2Id}
         setCategory3Id={setCategory3Id}

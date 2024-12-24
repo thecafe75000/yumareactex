@@ -7,7 +7,7 @@ type TProps = {
   setCategory1Id: React.Dispatch<React.SetStateAction<string | undefined>>
   setCategory2Id: React.Dispatch<React.SetStateAction<string | undefined>>
   setCategory3Id: React.Dispatch<React.SetStateAction<string | undefined>>
-  category3Id?: string | undefined
+  category3Id: string | undefined
   onChange: () => void
 }
 
