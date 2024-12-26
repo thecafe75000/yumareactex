@@ -21,7 +21,7 @@ const spuSlice = createSlice({
 export const getSpuListAsync = (params:TSpuParams) => {
   return async (dispatch:TDispatch) => {
     const result = await getSpuList(params) as any
-    console.log('spu result', result)
+    // console.log('spu result', result)
     dispatch(setSpuList(result.spuList))
   }
 }
