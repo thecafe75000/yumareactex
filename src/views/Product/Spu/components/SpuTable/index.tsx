@@ -4,6 +4,7 @@ import { Button, Flex, Space, Table } from 'antd'
 import { useAppDispatch } from '@/utils'
 import type { TStoreState } from '@/store'
 import { getSpuListAsync, useSelectorSpu } from '@/store/slice/spu'
+import { setIsAddSpuBtn } from '@/store/slice/config'
 
 const SpuTable = () => {
   const dispatch = useAppDispatch()
@@ -24,6 +25,9 @@ const SpuTable = () => {
         disabled={!categoryId.category3Id}
         type='primary'
         style={{ width: 200 }}
+        onClick={() => {
+          dispatch(setIsAddSpuBtn(true))
+        }}
       >
         Add Spu
       </Button>
