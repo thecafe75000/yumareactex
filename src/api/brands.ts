@@ -22,3 +22,8 @@ export interface BrandData {
 export const addNewBrand = (body: BrandData) => {
   return request.post('/product/trademark', body)
 }
+
+// 获取所有品牌 /product/allTrademark
+export const getAllBrands = () => {
+  return request.get('/product/allTrademark')
+}

@@ -3,7 +3,7 @@ import { Button, Form, Select } from 'antd'
 import { AntDesignOutlined } from '@ant-design/icons'
 import { getCategoryListByParentId } from '@/api/category'
 import { useAppDispatch } from '@/utils'
-import { setCategoryId } from '@/store/slice/config'
+import { setCategoryId, setIsAddSpuBtn } from '@/store/slice/config'
 
 const CategoryListRedux = () => {
   // 一级分类列表
@@ -85,10 +85,12 @@ const CategoryListRedux = () => {
       </Form.Item>
       <Form.Item style={{ width: 200 }}>
         <Button
+          type='primary'
           icon={<AntDesignOutlined />}
           onClick={() => {
             form.resetFields()
             dispatch(setCategoryId(form.getFieldsValue()))
+            dispatch(setIsAddSpuBtn(false))
             setDisabled(false)
           }}
         >

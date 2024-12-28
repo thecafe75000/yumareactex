@@ -14,3 +14,8 @@ export const getSpuList = (params:TSpuParams) => {
     params
   })
 }
+
+// 获取Spu销售属性 /product/spuSaleAttrList
+export const getSpuSaleAttrList = () => {
+  return request.get('/product/spuSaleAttrList')
+}
