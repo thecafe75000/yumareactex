@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, Form, Select } from 'antd'
 import { AntDesignOutlined } from '@ant-design/icons'
 import { getCategoryListByParentId } from '@/api/category'
+import { useAppDispatch } from '@/utils'
+import { setCategoryId } from '@/store/slice/config'
 
 const CategoryListRedux = () => {
   // 一级分类列表
@@ -25,6 +27,8 @@ const CategoryListRedux = () => {
       )
     })
   })
+
+  const dispatch = useAppDispatch()
   
   useEffect(() => {
     // 获取一级分类列表
@@ -43,6 +47,9 @@ const CategoryListRedux = () => {
           // 因此 e 的值就是item._id
           onChange={(e) => {
             updateCategoryListByParentId(setCategoryListTwo, e)
+            // dispatch(setCategoryId({ propName: 'category1Id', value: e }))
+            // console.log(form.getFieldsValue())
+            dispatch(setCategoryId(form.getFieldsValue()))
             // 通过表单实例 form 清空选中的二级与三级分类选项
             form.setFieldValue('category2Id', undefined)
             form.setFieldValue('category3Id', undefined)
@@ -59,6 +66,7 @@ const CategoryListRedux = () => {
           // 获取三级分类
           onChange={(e) => {
             updateCategoryListByParentId(setCategoryListThree, e)
+            dispatch(setCategoryId(form.getFieldsValue()))
             // 通过表单实例 form 清空选中的三级分类选项
             form.setFieldValue('category3Id', undefined)
           }}
@@ -69,7 +77,8 @@ const CategoryListRedux = () => {
           disabled={disabled}
           options={categoryListThree}
           placeholder='category list three here'
-          onChange={() => {
+          onChange={(e) => {
+            dispatch(setCategoryId(form.getFieldsValue()))
             setDisabled(true)
           }}
         />
@@ -79,6 +88,7 @@ const CategoryListRedux = () => {
           icon={<AntDesignOutlined />}
           onClick={() => {
             form.resetFields()
+            dispatch(setCategoryId(form.getFieldsValue()))
             setDisabled(false)
           }}
         >

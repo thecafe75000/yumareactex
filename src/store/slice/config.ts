@@ -9,7 +9,14 @@ const config = createSlice({
       current: 1,
       pageSize: 5,
       total: 100
-    }
+    },
+    categoryId: {
+      category1Id:'',
+      category2Id:'',
+      category3Id:''
+    },
+    // 是否点击了添加Spu的按钮
+    isAddSpuBtn: false
   },
   reducers: {
     setLoading: (state, { payload }) => {
@@ -37,9 +44,28 @@ const config = createSlice({
         ...state.pageInfo,
         ...payload
       }
+    },
+    setCategoryId: (state, { payload }) => {
+      //  console.log(payload)
+      // payload --> {propName:'category1Id', value: xxx}
+      // const propName: ('category1Id' | 'category2Id' | 'category3Id') = payload.propName
+      // console.log(propName, payload.value)
+      // state.categoryId[propName] = payload.value
+      state.categoryId = payload
+    },
+    setIsAddSpuBtn: (state, { payload }) => {
+      state.isAddSpuBtn = payload
     }
   }
 })
 
-export const { setLoading, addItem, delItem, setPageInfo } = config.actions
+export const {
+  setLoading,
+  addItem,
+  delItem,
+  setPageInfo,
+  setCategoryId,
+  setIsAddSpuBtn
+} = config.actions
+
 export default config.reducer
