@@ -33,6 +33,10 @@ const CategoryListRedux = () => {
   useEffect(() => {
     // 获取一级分类列表
     updateCategoryListByParentId(setCategoryListOne)
+    // 清理函数, 确保每次进入该组件时，categoryId 都是从一个干净的状态开始，避免了之前状态对当前组件的影响
+    return function () {
+      dispatch(setCategoryId({}))
+    }
   }, [])
   
   return (

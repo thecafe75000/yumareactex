@@ -13,6 +13,7 @@ const SpuTable = () => {
 
   useEffect(() => {
     const { category1Id, category2Id, category3Id } = categoryId
+    // console.log(categoryId)
     dispatch(
       getSpuListAsync({ pageNo: 1, pageSize: pageInfo.pageSize, category1Id, category2Id, category3Id })
     )

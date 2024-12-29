@@ -19,3 +19,8 @@ export const getSpuList = (params:TSpuParams) => {
 export const getSpuSaleAttrList = () => {
   return request.get('/product/spuSaleAttrList')
 }
+
+// 添加Spu /product/spu
+export const postProductSpu = (body:any) => {
+  return request.post('/product/spu', body)
+}

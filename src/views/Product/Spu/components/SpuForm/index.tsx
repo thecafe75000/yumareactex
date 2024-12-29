@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Button, Form, Input, InputNumber, Select, Space, Upload, UploadFile } from 'antd'
 import { getAllBrands } from '@/api/brands'
 import { PlusOutlined } from '@ant-design/icons'
 import SalesAttrList from '../SalesAttrList'
+import {  postProductSpu } from '@/api/spu'
+import { useAppDispatch, useMessage } from '@/utils'
+import { getSpuListAsync } from '@/store/slice/spu'
+import type { TStoreState } from '@/store'
+import { setIsAddSpuBtn } from '@/store/slice/config'
+
 
 const SpuForm = () => {
   // 定义存储所有品牌列表的状态
   const [brandsList, setBrandsList] = useState([])
   // 存储的图片列表
-   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [form] = Form.useForm()
+  const message = useMessage()
+  const dispatch = useAppDispatch()
+  const { pageInfo, categoryId} = useSelector((state: TStoreState) => state.config)
 
   useEffect(() => {
     // 获取所有品牌
@@ -21,6 +32,7 @@ const SpuForm = () => {
   
   return (
     <Form
+      form={form}
       name='spuForm'
       labelCol={{ span: 3 }}
       wrapperCol={{ span: 21 }}
@@ -28,13 +40,24 @@ const SpuForm = () => {
       initialValues={{
         sort: 0
       }}
-      onFinish={(body) => {
+      onFinish={ async (body) => {
         console.log('body', body)
-        // 把数据转结构转成与对应接口文档里的数据结构一致
+        // 把数据结构转成与对应接口文档里的数据结构一致
         body.imgs = body.imgs.fileList.map((img: any) => ({
           id: img.uid,
           url: img.response.url
         }))
+        body.categoryId = categoryId.category3Id
+        // 提交表单数据
+        const result = await postProductSpu(body) as any
+        // 更新页面数据
+        await dispatch(getSpuListAsync({
+            pageNo: 1,
+            pageSize: pageInfo.pageSize,
+            ...categoryId
+        }))
+        dispatch(setIsAddSpuBtn(false))
+        message.success(result.message)
       }}
       autoComplete='off'
     >
@@ -123,10 +146,16 @@ const SpuForm = () => {
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Space>
-          <Button type='primary' htmlType='submit'>
+          <Button
+            type='primary'
+            onClick={(e) => {
+              form.submit()
+          }}>
             Submit
           </Button>
-          <Button>Cancel</Button>
+          <Button onClick={() => {
+            dispatch(setIsAddSpuBtn(false))
+          }}>Cancel</Button>
         </Space>
       </Form.Item>
     </Form>
