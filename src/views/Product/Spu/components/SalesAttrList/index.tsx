@@ -1,29 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Flex, Input, Select, Space, Table, Tag } from 'antd'
 import { FileAddOutlined } from '@ant-design/icons'
 import { getSpuSaleAttrList } from '@/api/spu'
 import { useMessage } from '@/utils'
 
 type TProps = {
+  value?:any
   onChange?: (v: any) => void
 }
 
 const SalesAttrList = (props: TProps) => {
-  const {onChange} = props
+  const {value, onChange} = props
   // 存储销售属性列表的状态
   const [spuSaleAttrList, setSpuSaleAttrList] = useState<any[]>([])
   const message = useMessage()
 
   useEffect(() => {
-    getSpuSaleAttrList().then((value:any)=> {
-      // console.log('spuValue',value)
-      const { spuSaleAttrList } = value
-      setSpuSaleAttrList(spuSaleAttrList.map((item: any) => {
-        item.id = item.id.toString()
-        return item
-      }))
-    })
-  }, [])
+     if (value && spuSaleAttrList.length === 0) {
+       setSpuSaleAttrList(JSON.parse(JSON.stringify(props.value)))
+     }
+  }, [value])
 
   useEffect(() => {
     if (spuSaleAttrList && spuSaleAttrList.some((item:any)=>item.isSelected)) {
@@ -88,9 +84,7 @@ const SalesAttrList = (props: TProps) => {
             render(id, rows) {
               return (
                 <Space>
-                  {rows.valueArr.map((value: any) => (
-                    <Tag
-                      onClose={() => {
+                  {rows.valueArr.map((value: any) => (<Tag onClose={() => {
                         setSpuSaleAttrList(
                           spuSaleAttrList.map((item: any) => {
                             item.valueArr = item.valueArr.filter(
@@ -107,8 +101,7 @@ const SalesAttrList = (props: TProps) => {
                       {value.name}
                     </Tag>
                   ))}
-                  {rows.isAdd && (
-                    <Input
+                  {rows.isAdd && (<Input
                       onPressEnter={(e: any) => {
                         // console.log('Input e', e)
                         // 输入框里必须有输入的内容
@@ -143,9 +136,7 @@ const SalesAttrList = (props: TProps) => {
                       style={{ width: 180 }}
                     />
                   )}
-                  {rows.isAdd || (
-                    <Button
-                      onClick={() => {
+                  {rows.isAdd || ( <Button onClick={() => {
                         setSpuSaleAttrList(
                           spuSaleAttrList.map((item: any) => {
                             if (item.id === id) {

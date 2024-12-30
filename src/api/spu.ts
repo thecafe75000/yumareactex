@@ -24,3 +24,6 @@ export const getSpuSaleAttrList = () => {
 export const postProductSpu = (body:any) => {
   return request.post('/product/spu', body)
 }
+
+// 修改SPU /product/spu
+export const putProductSpu = (body:any)=>request.put("/product/spu",body);

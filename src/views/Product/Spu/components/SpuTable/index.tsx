@@ -6,7 +6,9 @@ import type { TStoreState } from '@/store'
 import { getSpuListAsync, useSelectorSpu } from '@/store/slice/spu'
 import { setIsAddSpuBtn } from '@/store/slice/config'
 
-const SpuTable = () => {
+
+const SpuTable = (props:any) => {
+  const { setSpuInfo } = props
   const dispatch = useAppDispatch()
   const { pageInfo, categoryId } = useSelector((state: TStoreState) => state.config)
   const { spuList } = useSelectorSpu()
@@ -21,13 +23,16 @@ const SpuTable = () => {
 
   return (
     <Flex vertical gap='middle'>
+      {/* 添加Spu的按钮 */}
       <Button
         // 非空字符串取反为false
         disabled={!categoryId.category3Id}
         type='primary'
         style={{ width: 200 }}
         onClick={() => {
+          // 将 SPU 表单展示出来
           dispatch(setIsAddSpuBtn(true))
+          setSpuInfo(null)
         }}
       >
         Add Spu
@@ -63,13 +68,17 @@ const SpuTable = () => {
           {
             title: 'Operation',
             align: 'center',
-            render() {
+            render(id,rows:any) {
               return (
                 <Space>
-                  <Button type='primary'>Edit</Button>
-                  <Button type='primary' danger>
-                    Delete
-                  </Button>
+                  {/* 编辑 Spu 的按钮 */}
+                  <Button type='primary' onClick={() => {
+                    // 显示Spu表单
+                    dispatch(setIsAddSpuBtn(true))
+                    // 将当前要编辑的内容传递给组件SpuForm让其有初始内容
+                    setSpuInfo({ ...rows })
+                  }}>Edit</Button>
+                  {/* <Button type='primary' danger>Delete</Button> */}
                 </Space>
               )
             }

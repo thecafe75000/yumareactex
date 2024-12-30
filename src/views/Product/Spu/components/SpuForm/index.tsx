@@ -4,14 +4,16 @@ import { Button, Form, Input, InputNumber, Select, Space, Upload, UploadFile } f
 import { getAllBrands } from '@/api/brands'
 import { PlusOutlined } from '@ant-design/icons'
 import SalesAttrList from '../SalesAttrList'
-import {  postProductSpu } from '@/api/spu'
+import {  postProductSpu, putProductSpu } from '@/api/spu'
 import { useAppDispatch, useMessage } from '@/utils'
 import { getSpuListAsync } from '@/store/slice/spu'
 import type { TStoreState } from '@/store'
 import { setIsAddSpuBtn } from '@/store/slice/config'
+import { getSpuSaleAttrList } from '@/api/spu'
 
 
-const SpuForm = () => {
+const SpuForm = (props:any) => {
+  const { spuInfo } = props
   // 定义存储所有品牌列表的状态
   const [brandsList, setBrandsList] = useState([])
   // 存储的图片列表
@@ -28,7 +30,45 @@ const SpuForm = () => {
       const {trademarkList} = value
       setBrandsList(trademarkList)
     })
-  },[])
+  }, [])
+  
+  useEffect(() => {
+    if (spuInfo) {
+      // 深复制
+      const copyFileList = JSON.parse(JSON.stringify(spuInfo.imgs)).map((item: any) => {
+          item.response = {
+            url: item.url
+          }
+          item.url = '/api/' + item.url
+          item.uid = item.id
+          item.name = item.id
+          item.status = 'done'
+
+          delete item.id
+          return item
+        }
+      )
+      form.setFieldValue('name', spuInfo.name)
+      form.setFieldValue('_id', spuInfo._id)
+      form.setFieldValue('trademarkId', spuInfo.trademarkId)
+      form.setFieldValue('description', spuInfo.description)
+      form.setFieldValue('sort', spuInfo.sort)
+      form.setFieldValue('imgs', { fileList: copyFileList })
+      // 设置销售属性
+      form.setFieldValue('spuSaleAttrList', spuInfo.spuSaleAttrList)
+      setFileList(copyFileList)
+    } else {
+      // 清空表单
+      form.resetFields()
+      getSpuSaleAttrList().then((value: any) => {
+        // 设置销售属性
+        form.setFieldValue('spuSaleAttrList',value.spuSaleAttrList.map((item: any) => {
+            // item.id = item.id.toString()
+            return item
+          }))
+      })
+    }
+  }, [spuInfo])
   
   return (
     <Form
@@ -41,21 +81,29 @@ const SpuForm = () => {
         sort: 0
       }}
       onFinish={ async (body) => {
-        console.log('body', body)
+        // console.log('body', body)
         // 把数据结构转成与对应接口文档里的数据结构一致
         body.imgs = body.imgs.fileList.map((img: any) => ({
           id: img.uid,
           url: img.response.url
         }))
-        body.categoryId = categoryId.category3Id
-        // 提交表单数据
-        const result = await postProductSpu(body) as any
-        // 更新页面数据
-        await dispatch(getSpuListAsync({
-            pageNo: 1,
-            pageSize: pageInfo.pageSize,
-            ...categoryId
-        }))
+        let result: any
+        // 有_id就是编辑表单, 否则就是给表单添加数据
+        if (body._id) {
+          body.categoryId = spuInfo.categoryId
+          result = await putProductSpu(body)
+        } else {
+          body.categoryId = categoryId.category3Id
+          // 提交表单数据
+          result = await postProductSpu(body)
+        }
+       
+        // 获取Spu列表信息以更新页面数据
+        // await dispatch(getSpuListAsync({
+        //     pageNo: 1,
+        //     pageSize: pageInfo.pageSize,
+        //     ...categoryId
+        // }))
         dispatch(setIsAddSpuBtn(false))
         message.success(result.message)
       }}
@@ -138,9 +186,7 @@ const SpuForm = () => {
       <Form.Item
         label='Spu Sales Attribute'
         name='spuSaleAttrList'
-        rules={[
-          { required: true, message: 'Please choose your sales attribute!' }
-        ]}
+        rules={[{ required: true, message: 'Please choose your sales attribute!' }]}
       >
         <SalesAttrList/>
       </Form.Item>
