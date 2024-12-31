@@ -5,10 +5,11 @@ import { useAppDispatch } from '@/utils'
 import type { TStoreState } from '@/store'
 import { getSpuListAsync, useSelectorSpu } from '@/store/slice/spu'
 import { setIsAddSpuBtn } from '@/store/slice/config'
+import { getSkuListBySpuId } from '@/api/sku'
 
 
 const SpuTable = (props:any) => {
-  const { setSpuInfo } = props
+  const { setSpuInfo, setOpen, setSkuList } = props
   const dispatch = useAppDispatch()
   const { pageInfo, categoryId } = useSelector((state: TStoreState) => state.config)
   const { spuList } = useSelectorSpu()
@@ -78,7 +79,11 @@ const SpuTable = (props:any) => {
                     // 将当前要编辑的内容传递给组件SpuForm让其有初始内容
                     setSpuInfo({ ...rows })
                   }}>Edit</Button>
-                  {/* <Button type='primary' danger>Delete</Button> */}
+                  <Button type='primary' onClick={async () => {
+                    const result:any = await getSkuListBySpuId(id)
+                    setSkuList(result.skuList)
+                    setOpen(true)
+                  }} >Check Sku</Button>
                 </Space>
               )
             }
