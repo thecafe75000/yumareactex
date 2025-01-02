@@ -10,3 +10,17 @@ export const getSkuListBySpuId = (spuId:string) => {
       }
     })
 }
+
+// 获取Sku列表 /product/skuList?pageNo=1&pageSize=5&category1Id=67001d601f26a08d9b27c605&category2Id=67001e521f26a08d9b27c66d&category3Id=67001e621f26a08d9b27c675
+export type TSkuParams = {
+  pageNo: number
+  pageSize: number
+  category1Id?: string
+  category2Id?: string
+  category3Id?: string
+}
+export const getSkuList = (params: TSkuParams) => {
+  return request.get('/product/skuList', {
+    params
+  })
+}
