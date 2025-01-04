@@ -24,3 +24,8 @@ export const getSkuList = (params: TSkuParams) => {
     params
   })
 }
+
+// 根据分类ID获取SPU列表 /product/allSpuList/:categoryId
+export const getSpuListByCategoryId = (categoryId:string) => {
+  return request.get(`/product/allSpuList/${categoryId}`)
+}

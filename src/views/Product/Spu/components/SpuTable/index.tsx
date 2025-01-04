@@ -84,7 +84,8 @@ const SpuTable = (props:any) => {
                       state: {
                         category1Id:rows.category1Id,
                         category2Id:rows.category2Id,
-                        category3Id:rows.categoryId
+                        category3Id: rows.categoryId,
+                        spuId: id
                       }
                     })}
                   >Add Sku</Button>
