@@ -6,9 +6,8 @@ import { PlusOutlined } from '@ant-design/icons'
 import SalesAttrList from '../SalesAttrList'
 import {  postProductSpu, putProductSpu } from '@/api/spu'
 import { useAppDispatch, useMessage } from '@/utils'
-import { getSpuListAsync } from '@/store/slice/spu'
 import type { TStoreState } from '@/store'
-import { setIsAddSpuBtn } from '@/store/slice/config'
+import { setIsAddBtn } from '@/store/slice/config'
 import { getSpuSaleAttrList } from '@/api/spu'
 
 
@@ -21,7 +20,7 @@ const SpuForm = (props:any) => {
   const [form] = Form.useForm()
   const message = useMessage()
   const dispatch = useAppDispatch()
-  const { pageInfo, categoryId} = useSelector((state: TStoreState) => state.config)
+  const {categoryId} = useSelector((state: TStoreState) => state.config)
 
   useEffect(() => {
     // 获取所有品牌
@@ -104,7 +103,7 @@ const SpuForm = (props:any) => {
         //     pageSize: pageInfo.pageSize,
         //     ...categoryId
         // }))
-        dispatch(setIsAddSpuBtn(false))
+        dispatch(setIsAddBtn(false))
         message.success(result.message)
       }}
       autoComplete='off'
@@ -200,7 +199,7 @@ const SpuForm = (props:any) => {
             Submit
           </Button>
           <Button onClick={() => {
-            dispatch(setIsAddSpuBtn(false))
+            dispatch(setIsAddBtn(false))
           }}>Cancel</Button>
         </Space>
       </Form.Item>

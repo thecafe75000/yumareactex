@@ -1,10 +1,11 @@
 import React,{useEffect} from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Button, Flex, Space, Table } from 'antd'
 import { useAppDispatch } from '@/utils'
 import type { TStoreState } from '@/store'
 import { getSpuListAsync, useSelectorSpu } from '@/store/slice/spu'
-import { setIsAddSpuBtn } from '@/store/slice/config'
+import { setIsAddBtn } from '@/store/slice/config'
 import { getSkuListBySpuId } from '@/api/sku'
 
 
@@ -13,12 +14,18 @@ const SpuTable = (props:any) => {
   const dispatch = useAppDispatch()
   const { pageInfo, categoryId } = useSelector((state: TStoreState) => state.config)
   const { spuList } = useSelectorSpu()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const { category1Id, category2Id, category3Id } = categoryId
     // console.log(categoryId)
-    dispatch(
-      getSpuListAsync({ pageNo: 1, pageSize: pageInfo.pageSize, category1Id, category2Id, category3Id })
+    dispatch(getSpuListAsync({
+      pageNo: 1,
+      pageSize: pageInfo.pageSize,
+      category1Id,
+      category2Id,
+      category3Id
+    })
     )
   }, [categoryId])
 
@@ -32,7 +39,7 @@ const SpuTable = (props:any) => {
         style={{ width: 200 }}
         onClick={() => {
           // 将 SPU 表单展示出来
-          dispatch(setIsAddSpuBtn(true))
+          dispatch(setIsAddBtn(true))
           setSpuInfo(null)
         }}
       >
@@ -72,10 +79,19 @@ const SpuTable = (props:any) => {
             render(id,rows:any) {
               return (
                 <Space>
+                  <Button
+                    onClick={() => navigate('/product/sku', {
+                      state: {
+                        category1Id:rows.category1Id,
+                        category2Id:rows.category2Id,
+                        category3Id:rows.categoryId
+                      }
+                    })}
+                  >Add Sku</Button>
                   {/* 编辑 Spu 的按钮 */}
                   <Button type='primary' onClick={() => {
                     // 显示Spu表单
-                    dispatch(setIsAddSpuBtn(true))
+                    dispatch(setIsAddBtn(true))
                     // 将当前要编辑的内容传递给组件SpuForm让其有初始内容
                     setSpuInfo({ ...rows })
                   }}>Edit</Button>
@@ -83,7 +99,7 @@ const SpuTable = (props:any) => {
                     const result:any = await getSkuListBySpuId(id)
                     setSkuList(result.skuList)
                     setOpen(true)
-                  }} >Check Sku</Button>
+                  }} >Check Spu</Button>
                 </Space>
               )
             }

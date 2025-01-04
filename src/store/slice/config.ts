@@ -16,7 +16,7 @@ const config = createSlice({
       category3Id:''
     },
     // 是否点击了添加Spu的按钮
-    isAddSpuBtn: false
+    isAddBtn: false
   },
   reducers: {
     setLoading: (state, { payload }) => {
@@ -53,8 +53,8 @@ const config = createSlice({
       // state.categoryId[propName] = payload.value
       state.categoryId = payload
     },
-    setIsAddSpuBtn: (state, { payload }) => {
-      state.isAddSpuBtn = payload
+    setIsAddBtn: (state, { payload }) => {
+      state.isAddBtn = payload
     }
   }
 })
@@ -65,7 +65,7 @@ export const {
   delItem,
   setPageInfo,
   setCategoryId,
-  setIsAddSpuBtn
+  setIsAddBtn
 } = config.actions
 
 export default config.reducer

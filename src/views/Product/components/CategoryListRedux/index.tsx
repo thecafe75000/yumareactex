@@ -3,7 +3,8 @@ import { Button, Form, Select } from 'antd'
 import { AntDesignOutlined } from '@ant-design/icons'
 import { getCategoryListByParentId } from '@/api/category'
 import { useAppDispatch } from '@/utils'
-import { setCategoryId, setIsAddSpuBtn } from '@/store/slice/config'
+import { setCategoryId, setIsAddBtn } from '@/store/slice/config'
+import { useLocation } from 'react-router-dom'
 
 const CategoryListRedux = () => {
   // 一级分类列表
@@ -15,8 +16,8 @@ const CategoryListRedux = () => {
 
   // 封装函数：用于改变选择级别分类列表
   // 调用根据parentId的接口之后，将获取到的分类信息列表更新到状态中
-  const updateCategoryListByParentId = ((upFn:React.Dispatch<React.SetStateAction<any[]>>, parentId?:string) => {
-    getCategoryListByParentId(parentId).then((value: any) => {
+  const updateCategoryListByParentId = (async (upFn:React.Dispatch<React.SetStateAction<any[]>>, parentId?:string) => {
+    return getCategoryListByParentId(parentId).then((value: any) => {
       // console.log('value', value)
       upFn(value.categoryList.map((item: any) => {
           return {
@@ -29,10 +30,29 @@ const CategoryListRedux = () => {
   })
 
   const dispatch = useAppDispatch()
+  const location = useLocation()
+
+  const init = async () => {
+    console.log('location ', location)
+    // 获取一级分类列表
+    await updateCategoryListByParentId(setCategoryListOne)
+    if (location.state) {
+      // 获取二级分类
+      await updateCategoryListByParentId(setCategoryListTwo,location.state.category1Id)
+      // 获取三级分类
+      await updateCategoryListByParentId(setCategoryListThree,location.state.category2Id)
+      form.setFieldValue('category1Id', location.state.category1Id)
+      form.setFieldValue('category2Id', location.state.category2Id)
+      form.setFieldValue('category3Id', location.state.category3Id)
+      // 不可点击分类选择框
+      setDisabled(true)
+      // 切换至添加sku表单
+      dispatch(setIsAddBtn(true))
+    }
+  }
   
   useEffect(() => {
-    // 获取一级分类列表
-    updateCategoryListByParentId(setCategoryListOne)
+    init()
     // 清理函数, 确保每次进入该组件时，categoryId 都是从一个干净的状态开始，避免了之前状态对当前组件的影响
     return function () {
       dispatch(setCategoryId({}))
@@ -93,8 +113,10 @@ const CategoryListRedux = () => {
           icon={<AntDesignOutlined />}
           onClick={() => {
             form.resetFields()
+            setCategoryListTwo([])
+            setCategoryListThree([])
             dispatch(setCategoryId(form.getFieldsValue()))
-            dispatch(setIsAddSpuBtn(false))
+            dispatch(setIsAddBtn(false))
             setDisabled(false)
           }}
         >

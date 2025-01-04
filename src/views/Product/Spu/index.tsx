@@ -7,10 +7,10 @@ import SpuForm from './components/SpuForm'
 import type { TStoreState } from '@/store'
 import { useAppDispatch } from '@/utils'
 import { useEffect } from 'react'
-import { setIsAddSpuBtn } from '@/store/slice/config'
+import { setIsAddBtn } from '@/store/slice/config'
 
 const Spu = () => {
-  const { isAddSpuBtn } = useSelector((state: TStoreState) => state.config)
+  const { isAddBtn } = useSelector((state: TStoreState) => state.config)
   const dispatch = useAppDispatch()
   const [spuInfo, setSpuInfo] = useState<any>(null)
   const [spuSaleAttrList, setSpuSaleAttrList] = useState([]) 
@@ -18,23 +18,24 @@ const Spu = () => {
   const [skuList, setSkuList] = useState([])
 
   useEffect(() => {
-    dispatch(setIsAddSpuBtn(false))
+    dispatch(setIsAddBtn(false))
   },[])
 
   return (
     <Flex vertical gap='middle'>
       <CategoryListRedux />
       {/* Spu列表的渲染 */}
-      {isAddSpuBtn || (
+      {isAddBtn || (
         <SpuTable
           setSpuSaleAttrList={setSpuSaleAttrList}
           setSpuInfo={setSpuInfo}
           setOpen={setOpen}
           setSkuList={setSkuList}
+          spuSaleAttrList={spuSaleAttrList}
         />
       )}
       {/* 添加Spu表单 */}
-      {isAddSpuBtn && (
+      {isAddBtn && (
         <SpuForm spuInfo={spuInfo} setSpuSaleAttrList={setSpuSaleAttrList} />
       )}
 
