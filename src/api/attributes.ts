@@ -13,4 +13,7 @@ export const getAttributesList = (params: TAttributesParams) => {
   return request.get('/product/attr', { params })
 }
 
-// 添加属性
+// 根据三级分类ID获取属性列表 /product/attr/:categoryId
+export const getAttrListByCategoryId = (categoryId:string) => {
+  return request.get(`/product/attr/${categoryId}`)
+}

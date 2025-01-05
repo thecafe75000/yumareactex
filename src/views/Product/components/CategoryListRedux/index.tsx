@@ -38,21 +38,27 @@ const CategoryListRedux = () => {
     await updateCategoryListByParentId(setCategoryListOne)
     if (location.state) {
       // 获取二级分类
-      await updateCategoryListByParentId(setCategoryListTwo,location.state.category1Id)
+      await updateCategoryListByParentId(
+        setCategoryListTwo,
+        location.state.category1Id
+      )
       // 获取三级分类
-      await updateCategoryListByParentId(setCategoryListThree,location.state.category2Id)
+      await updateCategoryListByParentId(
+        setCategoryListThree,
+        location.state.category2Id
+      )
       form.setFieldValue('category1Id', location.state.category1Id)
       form.setFieldValue('category2Id', location.state.category2Id)
       form.setFieldValue('category3Id', location.state.category3Id)
-      dispatch(setCategoryId({
-        category1Id: location.state.category1Id,
-        category2Id: location.state.category2Id,
-        category3Id: location.state.category3Id
-      }))
+      dispatch(
+        setCategoryId({
+          category1Id: location.state.category1Id,
+          category2Id: location.state.category2Id,
+          category3Id: location.state.category3Id
+        })
+      )
       // 不可点击分类选择框
       setDisabled(true)
-      // 切换至添加sku表单
-      dispatch(setIsAddBtn(true))
     }
   }
   
