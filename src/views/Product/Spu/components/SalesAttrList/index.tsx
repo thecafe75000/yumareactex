@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Flex, Input, Select, Space, Table, Tag } from 'antd'
 import { FileAddOutlined } from '@ant-design/icons'
-import { getSpuSaleAttrList } from '@/api/spu'
 import { useMessage } from '@/utils'
 
 type TProps = {
@@ -17,7 +16,7 @@ const SalesAttrList = (props: TProps) => {
 
   useEffect(() => {
      if (value && spuSaleAttrList.length === 0) {
-       setSpuSaleAttrList(JSON.parse(JSON.stringify(props.value)))
+       setSpuSaleAttrList(JSON.parse(JSON.stringify(value)))
      }
   }, [value])
 
@@ -30,7 +29,7 @@ const SalesAttrList = (props: TProps) => {
   return (
     <Flex vertical gap='middle'>
       <Select
-        mode='multiple'
+        mode='tags'
         style={{ width: 300 }}
         placeholder='Please choose sales attribute'
         onChange={(e) => {
@@ -111,12 +110,8 @@ const SalesAttrList = (props: TProps) => {
                           return
                         }
                         // 输入框里的内容不能重复
-                        if (
-                          rows.valueArr.some((item: any) => item.name === name)
-                        ) {
-                          message.error(
-                            'Duplicate attribute values ​​are not allowed ~~ '
-                          )
+                        if (rows.valueArr.some((item: any) => item.name === name)) {
+                          message.error('Duplicate attribute values ​​are not allowed ~~ ')
                           return
                         }
                         setSpuSaleAttrList(

@@ -38,8 +38,7 @@ const SkuTable = () => {
           pagination={{
             ...pageInfo,
             onChange(pageNo, pageSize) {
-              dispatch(
-                getSkuListAsync({
+              dispatch(getSkuListAsync({
                   pageNo,
                   pageSize,
                   ...categoryId

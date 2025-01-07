@@ -62,7 +62,7 @@ const SpuForm = (props:any) => {
       getSpuSaleAttrList().then((value: any) => {
         // 设置销售属性
         form.setFieldValue('spuSaleAttrList',value.spuSaleAttrList.map((item: any) => {
-            // item.id = item.id.toString()
+            item.id = item.id.toString()
             return item
           }))
       })
@@ -79,7 +79,7 @@ const SpuForm = (props:any) => {
       initialValues={{
         sort: 0
       }}
-      onFinish={ async (body) => {
+      onFinish={async (body) => {
         // console.log('body', body)
         // 把数据结构转成与对应接口文档里的数据结构一致
         body.imgs = body.imgs.fileList.map((img: any) => ({
@@ -96,22 +96,18 @@ const SpuForm = (props:any) => {
           // 提交表单数据
           result = await postProductSpu(body)
         }
-       
-        // 获取Spu列表信息以更新页面数据
-        // await dispatch(getSpuListAsync({
-        //     pageNo: 1,
-        //     pageSize: pageInfo.pageSize,
-        //     ...categoryId
-        // }))
         dispatch(setIsAddBtn(false))
         message.success(result.message)
       }}
       autoComplete='off'
     >
+      <Form.Item name={'_id'} hidden={true}>
+        <Input />
+      </Form.Item>
       <Form.Item
         label='Spu Name'
         name='name'
-        rules={[{ required: true, message: 'Please input your Spu name!' }]}
+        rules={[{ required: true, message: 'Please input Spu name!' }]}
       >
         <Input style={{ width: 180 }} autoComplete='off' />
       </Form.Item>
@@ -163,7 +159,6 @@ const SpuForm = (props:any) => {
           // 图片预览功能
           onPreview={() => {}}
           onChange={(e: any) => {
-            // console.log('e', e)
             setFileList(e.fileList)
           }}
         >
@@ -185,9 +180,11 @@ const SpuForm = (props:any) => {
       <Form.Item
         label='Spu Sales Attribute'
         name='spuSaleAttrList'
-        rules={[{ required: true, message: 'Please choose your sales attribute!' }]}
+        rules={[
+          { required: true, message: 'Please choose your sales attribute!' }
+        ]}
       >
-        <SalesAttrList/>
+        <SalesAttrList />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Space>
@@ -195,12 +192,17 @@ const SpuForm = (props:any) => {
             type='primary'
             onClick={(e) => {
               form.submit()
-          }}>
+            }}
+          >
             Submit
           </Button>
-          <Button onClick={() => {
-            dispatch(setIsAddBtn(false))
-          }}>Cancel</Button>
+          <Button
+            onClick={() => {
+              dispatch(setIsAddBtn(false))
+            }}
+          >
+            Cancel
+          </Button>
         </Space>
       </Form.Item>
     </Form>

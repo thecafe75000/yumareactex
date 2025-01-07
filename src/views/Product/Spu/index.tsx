@@ -18,7 +18,9 @@ const Spu = () => {
   const [skuList, setSkuList] = useState([])
 
   useEffect(() => {
-    dispatch(setIsAddBtn(false))
+    return () => {
+        dispatch(setIsAddBtn(false))
+    }
   },[])
 
   return (
@@ -36,7 +38,7 @@ const Spu = () => {
       )}
       {/* 添加Spu表单 */}
       {isAddBtn && (
-        <SpuForm spuInfo={spuInfo} setSpuSaleAttrList={setSpuSaleAttrList} />
+        <SpuForm spuInfo={spuInfo} />
       )}
 
       <Drawer

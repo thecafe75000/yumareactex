@@ -19,7 +19,7 @@ const Sku = () => {
       // 切换至添加sku表单
       dispatch(setIsAddBtn(true))
     }
-  }, [])
+  }, [location.state])
   
   return (
     <Flex vertical gap='middle'>

@@ -6,6 +6,7 @@ import type { TStoreState } from '@/store'
 import { getSpuListByCategoryId } from '@/api/sku'
 import { getAttrListByCategoryId } from '@/api/attributes'
 import AttrValueList from '../AttrValueList'
+import SaleAttrValueList from '../SaleAttrValueList'
 
 
 const SkuForm = () => {
@@ -19,9 +20,12 @@ const SkuForm = () => {
     if (categoryId.category3Id) {
       getSpuListByCategoryId(categoryId.category3Id).then((value: any) => {
         setSpuList(value.spuList)
+        console.log('spuList',value.spuList)
         // 如果接收的参数中有spuId, 则将spuId的值作为spu列表的选中项
         if (location.state && location.state.spuId) {
+          console.log('spuId', location.state.spuId)
           form.setFieldValue('spuId', location.state.spuId)
+          console.log('After setFieldValue', form.getFieldValue('spuId'))
         }
       })
       
@@ -43,7 +47,8 @@ const SkuForm = () => {
         sort: 0
       }}
       onFinish={(body) => {
-        console.log('body', body)
+        // console.log('body', body)
+        body.categoryId = categoryId.category3Id
       }}
       autoComplete='off'
     >
@@ -59,12 +64,10 @@ const SkuForm = () => {
           filterOption={(input, option) =>
             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
           }
-          options={spuList.map((item: any) => {
-            return {
-              value: item._id,
-              label: item.name
-            }
-          })}
+          options={spuList.map((item: any) => ({
+            value: item._id,
+            label: item.name
+          }))}
         />
       </Form.Item>
       <Form.Item
@@ -126,7 +129,14 @@ const SkuForm = () => {
       >
         <AttrValueList attrList={attrList} />
       </Form.Item>
-      <Form.Item label={null}>
+      <Form.Item
+        label='SalesAttr'
+        name='skuSaleAttrValueList'
+        rules={[{ required: true, message: 'Please choose sales attributes' }]}
+      >
+        <SaleAttrValueList />
+      </Form.Item>
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type='primary' htmlType='submit'>
           Submit
         </Button>

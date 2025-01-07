@@ -16,10 +16,14 @@ const CategoryListRedux = () => {
 
   // 封装函数：用于改变选择级别分类列表
   // 调用根据parentId的接口之后，将获取到的分类信息列表更新到状态中
-  const updateCategoryListByParentId = (async (upFn:React.Dispatch<React.SetStateAction<any[]>>, parentId?:string) => {
+  const updateCategoryListByParentId = async (
+    upFn: React.Dispatch<React.SetStateAction<any[]>>,
+    parentId?: string
+  ) => {
     return getCategoryListByParentId(parentId).then((value: any) => {
       // console.log('value', value)
-      upFn(value.categoryList.map((item: any) => {
+      upFn(
+        value.categoryList.map((item: any) => {
           return {
             label: item.name,
             value: item._id
@@ -27,15 +31,26 @@ const CategoryListRedux = () => {
         })
       )
     })
-  })
+  }
 
   const dispatch = useAppDispatch()
   const location = useLocation()
 
+  // 组件挂载完毕后执行
+  useEffect(() => {
+    const getCategoryOne = async () => {
+      // 获取一级分类列表
+      await updateCategoryListByParentId(setCategoryListOne)
+    }
+    getCategoryOne()
+    // 清理函数, 确保每次进入该组件时，categoryId 都是从一个干净的状态开始，避免了之前状态对当前组件的影响
+    return function () {
+      dispatch(setCategoryId({}))
+    }
+  }, [])
+
   const init = async () => {
     // console.log('location ', location)
-    // 获取一级分类列表
-    await updateCategoryListByParentId(setCategoryListOne)
     if (location.state) {
       // 获取二级分类
       await updateCategoryListByParentId(
@@ -61,15 +76,12 @@ const CategoryListRedux = () => {
       setDisabled(true)
     }
   }
-  
+
+  // 当接收的参数state发生更改执行
   useEffect(() => {
     init()
-    // 清理函数, 确保每次进入该组件时，categoryId 都是从一个干净的状态开始，避免了之前状态对当前组件的影响
-    return function () {
-      dispatch(setCategoryId({}))
-    }
-  }, [])
-  
+  }, [location.state])
+
   return (
     <Form form={form} layout='inline'>
       <Form.Item name='category1Id' style={{ width: 200 }}>
