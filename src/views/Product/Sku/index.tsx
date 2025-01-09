@@ -14,13 +14,19 @@ const Sku = () => {
   const location = useLocation()
   const dispatch = useAppDispatch()
 
+  // 只有在组件挂载和卸载的时候,下面useEffect的逻辑才会被执行
   useEffect(() => {
+    // 组件首次渲染(挂载时执行)
     if (location.state) {
       // 切换至添加sku表单
       dispatch(setIsAddBtn(true))
     }
-  }, [location.state])
-  
+    // 组件卸载时执行
+    return function () {
+      dispatch(setIsAddBtn(false))
+    }
+  }, [])
+
   return (
     <Flex vertical gap='middle'>
       <CategoryListRedux />

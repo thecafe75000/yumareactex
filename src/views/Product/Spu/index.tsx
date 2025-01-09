@@ -18,8 +18,9 @@ const Spu = () => {
   const [skuList, setSkuList] = useState([])
 
   useEffect(() => {
-    return () => {
-        dispatch(setIsAddBtn(false))
+    // 组件销毁的时候执行返回的清理函数
+    return function () {
+       dispatch(setIsAddBtn(false))
     }
   },[])
 

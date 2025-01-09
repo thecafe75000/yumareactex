@@ -76,6 +76,7 @@ const SpuTable = (props:any) => {
           {
             title: 'Operation',
             align: 'center',
+            dataIndex:'_id',
             render(id,rows:any) {
               return (
                 <Space>

@@ -85,7 +85,7 @@ export const useMenuRoutes = () => {
         },
         {
           path: '/product/category',
-          title: 'Product Category',
+          title: 'Category',
           element: useRenderElement('Product/Category')
         },
         {
