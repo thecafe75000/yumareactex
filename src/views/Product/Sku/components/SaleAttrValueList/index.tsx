@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Select, Space } from 'antd'
 
 const SaleAttrValueList = (props: any) => {
-  const { spuSaleAttrList, onChange } = props
+  const { spuSaleAttrList, onChange,value } = props
   // console.log('spusaleattrlistof props', spuSaleAttrList)
   const [skuSaleAttrValueList, setSkuSaleAttrValueList] = useState({})
 
@@ -16,6 +16,7 @@ const SaleAttrValueList = (props: any) => {
   return (
     <Space wrap={true}>
       {spuSaleAttrList.map((item: any) => {
+        let defaultValue = value ? value[item.id]:undefined
         return (
           <Space key={item.id}>
             <label style={{ fontWeight: 'bold' }} htmlFor={item.id}>
@@ -24,6 +25,7 @@ const SaleAttrValueList = (props: any) => {
             <Select
               placeholder={'Please choose ' + item.name}
               style={{ width: 180 }}
+              defaultValue={defaultValue}
               options={item.valueArr.map((item: any) => ({
                 value: item.id,
                 label: item.name
@@ -32,7 +34,7 @@ const SaleAttrValueList = (props: any) => {
               onChange={(value) => {
                 setSkuSaleAttrValueList({
                   ...skuSaleAttrValueList,
-                  [item.id]:value
+                  [item.id]: value
                 })
               }}
             />

@@ -29,3 +29,13 @@ export const getSkuList = (params: TSkuParams) => {
 export const getSpuListByCategoryId = (categoryId:string) => {
   return request.get(`/product/allSpuList/${categoryId}`)
 }
+
+// 添加Sku  /product/sku
+export const postProductSku = (body:any) => {
+  return request.post('/product/sku', body)
+}
+
+// 修改
+export const putProductSku = (body: any) => {
+  return request.put('/product/sku', body)
+}

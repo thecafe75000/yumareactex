@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Select, Space } from 'antd'
 
 const AttrValueList = (props: any) => {
-  const { attrList, onChange} = props
+  const { attrList, onChange, value} = props
   // console.log('attrList', attrList)
     const [skuAttrValueList, setSkuAttrValueList] = useState({})
     
@@ -14,7 +14,12 @@ const AttrValueList = (props: any) => {
     
   return (
     <Space wrap={true}>
-      {attrList.map((item: any) => {
+      {
+        attrList.map((item: any) => {
+          let defaultValue
+          if (value) {
+            defaultValue = value[item._id]
+          }
         return (
           <Space key={item._id}>
             <label style={{ fontWeight: 'bold' }} htmlFor={item._id}>
@@ -24,11 +29,12 @@ const AttrValueList = (props: any) => {
               id={item._id}
               style={{ width: 200 }}
               placeholder={'Please choose' + item.name}
+              defaultValue={defaultValue}
               onChange={(value) => {
-                  setSkuAttrValueList({
-                      ...skuAttrValueList,
-                      [item._id]: value
-                  })
+                setSkuAttrValueList({
+                  ...skuAttrValueList,
+                  [item._id]: value
+                })
               }}
               options={item.attrValueList.map((item: any) => {
                 return {

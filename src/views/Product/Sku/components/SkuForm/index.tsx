@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { Button, Form, Input, InputNumber, Select } from 'antd'
+import { Button, Form, Input, InputNumber, Select, Space } from 'antd'
 import type { TStoreState } from '@/store'
-import { getSpuListByCategoryId } from '@/api/sku'
+import { getSpuListByCategoryId, postProductSku, putProductSku } from '@/api/sku'
 import { getAttrListByCategoryId } from '@/api/attributes'
 import AttrValueList from '../AttrValueList'
 import SaleAttrValueList from '../SaleAttrValueList'
 import Imgs from '../Imgs'
+import { useAppDispatch, useMessage } from '@/utils'
+import { setIsAddBtn } from '@/store/slice/config'
 
 
 const SkuForm = () => {
@@ -20,6 +22,8 @@ const SkuForm = () => {
   const [spuSaleAttrList, setSpuSaleAttrList] = useState([]) 
   // 图片
   const [imgs, setImgs] = useState([])
+  const message = useMessage()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (categoryId.category3Id) {
@@ -28,16 +32,30 @@ const SkuForm = () => {
         // console.log('spuList',value.spuList)
         // 如果接收的参数中有spuId, 则将spuId的值作为spu列表的选中项
         if (location.state && location.state.spuId) {
-          // console.log('spuId', location.state.spuId)
-          form.setFieldValue('spuId', location.state.spuId)
-          const spuInfo = value.spuList.find((v: any) => v._id === location.state.spuId)
-          // SalesAttr 销售属性的各项值
-          const spuSaleAttrList = spuInfo.spuSaleAttrList.filter((v: any) => v.isSelected)
-          // console.log('sales', spuSaleAttrList)
-          setSpuSaleAttrList(spuSaleAttrList)
-          // 设置图片
-          const imgList = spuInfo.imgs
-          setImgs(imgList)
+             form.setFieldValue('spuId', location.state.spuId)
+             const spuInfo = value.spuList.find((v: any) => v._id === location.state.spuId)
+             // SalesAttr 销售属性的各项值
+             const spuSaleAttrList = spuInfo.spuSaleAttrList.filter((v: any) => v.isSelected)
+             setSpuSaleAttrList(spuSaleAttrList)
+             // 设置图片
+             const imgList = spuInfo.imgs
+             setImgs(imgList)
+          if (location.state.rows) {
+            // 修改
+            form.setFieldValue('name', location.state.rows.name)
+            form.setFieldValue('price', location.state.rows.price)
+            form.setFieldValue('weight', location.state.rows.weight)
+            form.setFieldValue('sort', location.state.rows.sort)
+            form.setFieldValue('description', location.state.rows.description)
+            // 平台属性
+            form.setFieldValue('skuAttrValueList', location.state.rows.skuAttrValueList)
+            // 销售属性
+            form.setFieldValue('skuSaleAttrValueList', location.state.rows.skuSaleAttrValueList)
+            form.setFieldValue('imgs', location.state.rows.imgs)
+            if (!location.state.isAdd) {
+               form.setFieldValue('_id', location.state.rows._id)
+            }
+          } 
         }
       })
 
@@ -58,9 +76,18 @@ const SkuForm = () => {
       initialValues={{
         sort: 0
       }}
-      onFinish={(body) => {
-        console.log('body', body)
+      onFinish={async (body) => {
         body.categoryId = categoryId.category3Id
+        let result:any
+        if (body._id) {
+          // 修改
+          result = await putProductSku(body)
+        } else {
+          // 提交表单
+          result = await postProductSku(body)
+        }
+        message.success(result.message)
+        dispatch(setIsAddBtn(false))
       }}
       autoComplete='off'
     >
@@ -89,6 +116,9 @@ const SkuForm = () => {
             label: item.name
           }))}
         />
+      </Form.Item>
+      <Form.Item name='_id' hidden>
+        <Input/>
       </Form.Item>
       <Form.Item
         label='Sku Name'
@@ -164,9 +194,16 @@ const SkuForm = () => {
         <Imgs imgs={imgs} />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type='primary' htmlType='submit'>
-          Submit
-        </Button>
+        <Space>
+          <Button type='primary' htmlType='submit'>
+            Submit
+          </Button>
+          <Button type='primary' danger htmlType='submit' onClick={() => {
+             dispatch(setIsAddBtn(false))
+          }}>
+            Cancel
+          </Button>
+        </Space>
       </Form.Item>
     </Form>
   )
