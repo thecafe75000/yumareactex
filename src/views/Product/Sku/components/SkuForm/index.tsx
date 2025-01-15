@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Button, Form, Input, InputNumber, Select, Space } from 'antd'
 import type { TStoreState } from '@/store'
 import { getSpuListByCategoryId, postProductSku, putProductSku } from '@/api/sku'
@@ -24,6 +24,7 @@ const SkuForm = () => {
   const [imgs, setImgs] = useState([])
   const message = useMessage()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (categoryId.category3Id) {
@@ -199,7 +200,10 @@ const SkuForm = () => {
             Submit
           </Button>
           <Button type='primary' danger htmlType='submit' onClick={() => {
-             dispatch(setIsAddBtn(false))
+            dispatch(setIsAddBtn(false))
+            if (location.state) {
+              navigate('/product/sku')
+            }
           }}>
             Cancel
           </Button>

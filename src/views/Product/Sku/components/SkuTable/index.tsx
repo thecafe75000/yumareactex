@@ -7,9 +7,11 @@ import { getSkuListAsync, useSelectorSku } from '@/store/slice/sku'
 import type { TStoreState } from '@/store'
 import { FileAddOutlined } from '@ant-design/icons'
 import { setIsAddBtn } from '@/store/slice/config'
+import request from '@/axios/request'
 
 
-const SkuTable = () => {
+const SkuTable = (props:any) => {
+    const { setOpen, setSkuInfo } = props
     const dispatch = useAppDispatch()
     const { pageInfo, categoryId } = useSelector((state: TStoreState) => state.config)
   const { skuList } = useSelectorSku()
@@ -105,7 +107,7 @@ const SkuTable = () => {
               title: 'Operation',
               align: 'center',
               dataIndex: '_id',
-              width:200,
+              width:220,
               fixed: 'right',
               render(id,rows:any) {
                 return (
@@ -146,6 +148,21 @@ const SkuTable = () => {
                       }}
                     >
                       Edit
+                    </Button>
+                    <Button
+                      type='primary'
+                      danger
+                      shape='circle'
+                      style={{ width: 42, height: 42 }}
+                      onClick={ async() => {
+                        await request.get('/product/sku/' + id).then((value:any) => {
+                          setSkuInfo(value.skuInfo)
+                          
+                        })
+                        setOpen(true)
+                      }}
+                    >
+                      Check
                     </Button>
                     <Button
                       type='primary'
